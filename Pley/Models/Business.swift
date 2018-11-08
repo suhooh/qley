@@ -3,56 +3,43 @@ import SwiftyJSON
 
 struct Business {
     let id: String
-    let rating: Int
-    let price: String
-    let phone: String
-    let alias: String
-    let isClosed: Bool
-    let categories: [Category]
-    let reviewCount: Int
     let name: String
-    let url: String
-    let coordinates: Coordinate
-    let imageUrl: String
-    let location: Location
-    let distance: Float
-    let transactions: [String]
+    let reviewCount: Int
+
+    let rating: Float?
+    let alias: String?
+    let isClosed: Bool?
+    let url: String?
+    let distance: Float?
+    let location: Location?
+    let price: String?
+    let phone: String?
+    let displayPhone: String?
+    let imageUrl: String?
+    let coordinates: Coordinate?
+    let categories: [Category]?
+    let transactions: [String]?
 
     init?(json: JSON) {
-        guard
-            let id = json["id"].string,
-            let rating = json["rating"].int,
-            let price = json["price"].string,
-            let phone = json["phone"].string,
-            let alias = json["alias"].string,
-            let isClosed = json["is_closed"].bool,
-            let categoriesData = json["categories"].array,
-            let reviewCount = json["review_count"].int,
-            let name = json["name"].string,
-            let url = json["url"].string,
-            let coordinates = Coordinate(json["coordinates"]),
-            let imageUrl = json["image_url"].string,
-            let location = Location(json["location"]),
-            let distance = json["distance"].float,
-            let transactionsData = json["transactions"].array
-            else {
-                return nil
-        }
+        guard let id = json["id"].string, let name = json["name"].string else { return nil }
 
         self.id = id
-        self.rating = rating
-        self.price = price
-        self.phone = phone
-        self.alias = alias
-        self.isClosed = isClosed
-        self.categories = categoriesData.compactMap(Category.init)
-        self.reviewCount = reviewCount
         self.name = name
-        self.url = url
-        self.coordinates = coordinates
-        self.imageUrl = imageUrl
-        self.location = location
-        self.distance = distance
-        self.transactions = transactionsData.compactMap(String.init)
+
+        // Optionals
+        self.reviewCount = json["review_count"].int ?? 0
+        self.rating = json["rating"].float
+        self.alias =  json["alias"].string
+        self.isClosed = json["is_closed"].bool
+        self.url = json["url"].string
+        self.distance = json["distance"].float
+        self.location = Location(json["location"])
+        self.price = json["price"].string
+        self.phone = json["phone"].string
+        self.displayPhone = json["display_phone"].string
+        self.imageUrl = json["image_url"].string
+        self.coordinates = Coordinate(json["coordinates"])
+        self.categories = json["categories"].array?.compactMap(Category.init)
+        self.transactions = json["transactions"].array?.compactMap(String.init)
     }
 }
