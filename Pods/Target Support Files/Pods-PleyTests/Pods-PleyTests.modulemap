@@ -1,0 +1,6 @@
+framework module Pods_PleyTests {
+  umbrella header "Pods-PleyTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
