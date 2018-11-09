@@ -18,6 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZnJ-7C-Zas">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D32-xq-KoX">
                                 <rect key="frame" x="16" y="41" width="287" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -25,19 +28,31 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="MPG-Pq-8yz">
-                                <rect key="frame" x="16" y="112" width="343" height="535"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="MPG-Pq-8yz">
+                                <rect key="frame" x="16" y="526" width="174" height="121"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="174" id="ItO-Dr-lxb"/>
+                                    <constraint firstAttribute="height" constant="121" id="tYL-cO-VXs"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="MPG-Pq-8yz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="8Wm-Vz-zhF"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MPG-Pq-8yz" secondAttribute="bottom" constant="20" id="pKw-ej-dFu"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="wuk-sm-m7W"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="logTextView" destination="MPG-Pq-8yz" id="iQr-lu-17G"/>
+                        <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
                         <outlet property="searchTextField" destination="D32-xq-KoX" id="SNw-Og-HQe"/>
                     </connections>
                 </viewController>
