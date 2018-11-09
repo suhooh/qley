@@ -8,6 +8,9 @@ PODS:
   - RxAtomic (4.4.0)
   - RxCocoa (4.4.0):
     - RxSwift (~> 4.0)
+  - RxMKMapView (4.3.0):
+    - RxCocoa (~> 4.3)
+    - RxSwift (~> 4.3)
   - RxSwift (4.4.0):
     - RxAtomic (~> 4.4)
   - SwiftyJSON (4.2.0)
@@ -16,6 +19,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.7)
   - RxAlamofire (~> 4.3)
   - RxCocoa (~> 4.4)
+  - RxMKMapView (~> 4.3)
   - RxSwift (~> 4.4)
   - SwiftyJSON (~> 4.2)
 
@@ -25,6 +29,7 @@ SPEC REPOS:
     - RxAlamofire
     - RxAtomic
     - RxCocoa
+    - RxMKMapView
     - RxSwift
     - SwiftyJSON
 
@@ -33,9 +38,10 @@ SPEC CHECKSUMS:
   RxAlamofire: 09624d0f2d48ed8b686e4eb4cf68e28cbd2df556
   RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
   RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
+  RxMKMapView: 71f1a69a5e3b889662a6ec430006324974418d0c
   RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: c665d313d43b7b3753ef00f83bbb35151d951b4b
+PODFILE CHECKSUM: e9f2f12f6a7a3c007914c33293ff295c1efb11d3
 
 COCOAPODS: 1.5.3

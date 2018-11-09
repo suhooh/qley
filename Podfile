@@ -6,6 +6,7 @@ target 'Pley' do
   pod 'RxSwift',    '~> 4.4'
   pod 'RxCocoa',    '~> 4.4'
   pod 'RxAlamofire','~> 4.3'
+  pod 'RxMKMapView','~> 4.3'
   pod 'Alamofire',  '~> 4.7'
 
   target 'PleyTests' do
