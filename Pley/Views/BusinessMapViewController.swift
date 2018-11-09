@@ -6,12 +6,10 @@ import RxMKMapView
 import Kingfisher
 
 class BusinessMapViewController: UIViewController {
-    @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var mapView: MKMapView!
 
     var viewModel: BusinessViewModel! {
         didSet {
-            bindView(with: viewModel)
             bindMapView(with: viewModel)
             // TODO: remove
             centerMapOnLocation(location: viewModel.location)
@@ -21,17 +19,6 @@ class BusinessMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-
-    private func bindView(with viewModel: BusinessViewModel) {
-        searchTextField.rx.text.orEmpty
-            .bind(to: viewModel.searchText)
-            .disposed(by: disposeBag)
-
-        //        viewModel.businesses
-        //            .map { "\($0.count) \($0.description)" }
-        //            .bind(to: logTextView.rx.text)
-        //            .disposed(by: disposeBag)
     }
 
     func bindMapView(with viewModel: BusinessViewModel) {

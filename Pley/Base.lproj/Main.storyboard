@@ -21,13 +21,6 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZnJ-7C-Zas">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D32-xq-KoX">
-                                <rect key="frame" x="16" y="41" width="184" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -40,7 +33,6 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
-                        <outlet property="searchTextField" destination="D32-xq-KoX" id="SNw-Og-HQe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -55,9 +47,31 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-ct-N2E">
+                                <rect key="frame" x="170.5" y="6" width="34" height="5"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.70461047535211263" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="5" id="338-fE-awX"/>
+                                    <constraint firstAttribute="width" constant="34" id="B2r-gI-vvd"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <real key="value" value="2.5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search for restaurants" translatesAutoresizingMaskIntoConstraints="NO" id="EmS-Yc-d9h">
+                                <rect key="frame" x="6" y="7" width="363" height="56"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                            </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uck-sy-EnB">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <rect key="frame" x="0.0" y="63" width="375" height="604"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessTableViewCell" rowHeight="90" id="25K-se-ISg" customClass="BusinessTableViewCell" customModule="Pley" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
@@ -79,6 +93,7 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="mainImageView" destination="iPe-yU-q2f" id="AeL-Nw-boR"/>
                                             <outlet property="nameLabel" destination="qdg-n9-p8J" id="ZUG-xE-W5r"/>
@@ -87,16 +102,22 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" id="AAq-Ot-PCd"/>
-                            <constraint firstAttribute="top" secondItem="uck-sy-EnB" secondAttribute="top" id="jBH-y1-vEG"/>
+                            <constraint firstItem="FDD-ct-N2E" firstAttribute="centerX" secondItem="Hen-h4-pDu" secondAttribute="centerX" id="OTq-7B-ktN"/>
+                            <constraint firstAttribute="trailing" secondItem="EmS-Yc-d9h" secondAttribute="trailing" constant="6" id="P3S-Se-anm"/>
+                            <constraint firstItem="EmS-Yc-d9h" firstAttribute="leading" secondItem="Hen-h4-pDu" secondAttribute="leading" constant="6" id="QJ7-cx-eaQ"/>
+                            <constraint firstAttribute="top" secondItem="EmS-Yc-d9h" secondAttribute="top" constant="-7" id="Zo2-gm-04c"/>
+                            <constraint firstAttribute="top" secondItem="FDD-ct-N2E" secondAttribute="top" constant="-6" id="fLn-rz-fJJ"/>
+                            <constraint firstItem="EmS-Yc-d9h" firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="top" id="jBH-y1-vEG"/>
                             <constraint firstItem="uck-sy-EnB" firstAttribute="leading" secondItem="Hen-h4-pDu" secondAttribute="leading" id="mqs-Mj-WVr"/>
                             <constraint firstAttribute="trailing" secondItem="uck-sy-EnB" secondAttribute="trailing" id="zWx-hK-eJr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Xv9-1B-Jl4"/>
                     </view>
                     <connections>
+                        <outlet property="searchBar" destination="EmS-Yc-d9h" id="2nA-jq-sHb"/>
                         <outlet property="tableView" destination="uck-sy-EnB" id="Pcy-7J-mwB"/>
                     </connections>
                 </viewController>
