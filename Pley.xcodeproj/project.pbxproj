@@ -23,6 +23,7 @@
 		8BCBD40D2194BA5900966CE8 /* BusinessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD40C2194BA5900966CE8 /* BusinessViewModel.swift */; };
 		8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD40E2194C16700966CE8 /* YelpAPIService.swift */; };
 		8BCBD411219574BD00966CE8 /* BusinessAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD410219574BD00966CE8 /* BusinessAnnotation.swift */; };
+		8BCBD4132195F75700966CE8 /* BusinessTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4122195F75700966CE8 /* BusinessTableViewCell.swift */; };
 		9AB19307B6D78A9B812DEE8D /* Pods_PleyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		8BCBD40C2194BA5900966CE8 /* BusinessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessViewModel.swift; sourceTree = "<group>"; };
 		8BCBD40E2194C16700966CE8 /* YelpAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPIService.swift; sourceTree = "<group>"; };
 		8BCBD410219574BD00966CE8 /* BusinessAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessAnnotation.swift; sourceTree = "<group>"; };
+		8BCBD4122195F75700966CE8 /* BusinessTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessTableViewCell.swift; sourceTree = "<group>"; };
 		BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PleyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED9FA96C83F2D753172388C8 /* Pods-PleyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PleyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PleyTests/Pods-PleyTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,12 +143,12 @@
 		8BCBD3FC2194A57E00966CE8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8BCBD4002194A7DA00966CE8 /* Business.swift */,
-				8BCBD4022194B77700966CE8 /* Category.swift */,
-				8BCBD4042194B7A400966CE8 /* Coordinate.swift */,
-				8BCBD4062194B7E200966CE8 /* Location.swift */,
-				8BCBD4082194B7FD00966CE8 /* Region.swift */,
 				8BCBD40A2194B85F00966CE8 /* BusinessSearchResponse.swift */,
+				8BCBD4002194A7DA00966CE8 /* Business.swift */,
+				8BCBD4082194B7FD00966CE8 /* Region.swift */,
+				8BCBD4062194B7E200966CE8 /* Location.swift */,
+				8BCBD4042194B7A400966CE8 /* Coordinate.swift */,
+				8BCBD4022194B77700966CE8 /* Category.swift */,
 				8BCBD410219574BD00966CE8 /* BusinessAnnotation.swift */,
 			);
 			path = Models;
@@ -172,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				8BCBD3B22194A42900966CE8 /* BusinessViewController.swift */,
+				8BCBD4122195F75700966CE8 /* BusinessTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Pley/Pods-Pley-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAlamofire/RxAlamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
@@ -309,6 +313,7 @@
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAlamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
@@ -377,6 +382,7 @@
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,
 				8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */,
 				8BCBD3B32194A42900966CE8 /* BusinessViewController.swift in Sources */,
+				8BCBD4132195F75700966CE8 /* BusinessTableViewCell.swift in Sources */,
 				8BCBD3B12194A42900966CE8 /* AppDelegate.swift in Sources */,
 				8BCBD4032194B77700966CE8 /* Category.swift in Sources */,
 				8BCBD411219574BD00966CE8 /* BusinessAnnotation.swift in Sources */,

@@ -22,38 +22,63 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="D32-xq-KoX">
-                                <rect key="frame" x="16" y="41" width="287" height="30"/>
+                                <rect key="frame" x="16" y="41" width="184" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="MPG-Pq-8yz">
-                                <rect key="frame" x="16" y="526" width="174" height="121"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uck-sy-EnB">
+                                <rect key="frame" x="0.0" y="390" width="375" height="277"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="174" id="ItO-Dr-lxb"/>
-                                    <constraint firstAttribute="height" constant="121" id="tYL-cO-VXs"/>
+                                    <constraint firstAttribute="height" constant="277" id="Q1V-6P-TTw"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessTableViewCell" rowHeight="90" id="25K-se-ISg" customClass="BusinessTableViewCell" customModule="Pley" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="90"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="25K-se-ISg" id="C3r-Xd-Xr5">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="89.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iPe-yU-q2f">
+                                                    <rect key="frame" x="5" y="5" width="80" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdg-n9-p8J">
+                                                    <rect key="frame" x="105" y="11" width="192" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="mainImageView" destination="iPe-yU-q2f" id="AeL-Nw-boR"/>
+                                            <outlet property="nameLabel" destination="qdg-n9-p8J" id="ZUG-xE-W5r"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="MPG-Pq-8yz" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="8Wm-Vz-zhF"/>
+                            <constraint firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" id="7NC-Mg-AN4"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="uck-sy-EnB" secondAttribute="trailing" id="D7C-UX-A6j"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="MPG-Pq-8yz" secondAttribute="bottom" constant="20" id="pKw-ej-dFu"/>
+                            <constraint firstItem="uck-sy-EnB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iqA-Im-5u0"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="wuk-sm-m7W"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="logTextView" destination="MPG-Pq-8yz" id="iQr-lu-17G"/>
                         <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
                         <outlet property="searchTextField" destination="D32-xq-KoX" id="SNw-Og-HQe"/>
+                        <outlet property="tableView" destination="uck-sy-EnB" id="Hjl-iq-B54"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -3,11 +3,13 @@ import RxSwift
 import RxCocoa
 import MapKit
 import RxMKMapView
+import Kingfisher
 
 class BusinessViewController: UIViewController {
-    @IBOutlet weak var mapView: MKMapView!
+
     @IBOutlet weak var searchTextField: UITextField!
-    @IBOutlet weak var logTextView: UITextView!
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var tableView: UITableView!
 
     private var viewModel: BusinessViewModel!
     private let disposeBag = DisposeBag()
@@ -16,25 +18,40 @@ class BusinessViewController: UIViewController {
         super.viewDidLoad()
 
         viewModel = BusinessViewModel()
-        addBindsToViewModel(viewModel)
-        bindMapView(viewModel)
+        bindView(with: viewModel)
+        bindMapView(with: viewModel)
+        bindTableView(with: viewModel)
 
         // TODO: remove
         centerMapOnLocation(location: viewModel.location)
     }
 
-    private func addBindsToViewModel(_ viewModel: BusinessViewModel) {
+    private func bindView(with viewModel: BusinessViewModel) {
         searchTextField.rx.text.orEmpty
             .bind(to: viewModel.searchText)
             .disposed(by: disposeBag)
 
+//        viewModel.businesses
+//            .map { "\($0.count) \($0.description)" }
+//            .bind(to: logTextView.rx.text)
+//            .disposed(by: disposeBag)
+    }
+
+    func bindTableView(with viewModel: BusinessViewModel) {
         viewModel.businesses
-            .map { "\($0.count) \($0.description)" }
-            .bind(to: logTextView.rx.text)
+            .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: Business) in
+                let indexPath = IndexPath(item: index, section: 0)
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as? BusinessTableViewCell else {
+                    return UITableViewCell()
+                }
+                cell.nameLabel.text = element.name
+                cell.mainImageView.kf.setImage(with: URL(string: element.imageUrl!)!)
+                return cell
+            }
             .disposed(by: disposeBag)
     }
 
-    func bindMapView(_ viewModel: BusinessViewModel) {
+    func bindMapView(with viewModel: BusinessViewModel) {
         mapView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
