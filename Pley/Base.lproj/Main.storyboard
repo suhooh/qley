@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -10,10 +10,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Business View Controller-->
+        <!--Business Map View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="BusinessViewController" customModule="Pley" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BusinessMapViewController" id="BYZ-38-t0r" customClass="BusinessMapViewController" customModule="Pley" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -28,12 +28,36 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
+                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="wuk-sm-m7W"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
+                        <outlet property="searchTextField" destination="D32-xq-KoX" id="SNw-Og-HQe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="140" y="106.59670164917542"/>
+        </scene>
+        <!--Business Table View Controller-->
+        <scene sceneID="lMi-Wt-REb">
+            <objects>
+                <viewController storyboardIdentifier="BusinessTableViewController" id="9Vn-Bu-Zvj" customClass="BusinessTableViewController" customModule="Pley" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hen-h4-pDu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="90" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uck-sy-EnB">
-                                <rect key="frame" x="0.0" y="390" width="375" height="277"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="277" id="Q1V-6P-TTw"/>
-                                </constraints>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessTableViewCell" rowHeight="90" id="25K-se-ISg" customClass="BusinessTableViewCell" customModule="Pley" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="90"/>
@@ -63,27 +87,22 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" id="7NC-Mg-AN4"/>
-                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="uck-sy-EnB" secondAttribute="trailing" id="D7C-UX-A6j"/>
-                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
-                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
-                            <constraint firstItem="uck-sy-EnB" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iqA-Im-5u0"/>
-                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="wuk-sm-m7W"/>
+                            <constraint firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" id="AAq-Ot-PCd"/>
+                            <constraint firstAttribute="top" secondItem="uck-sy-EnB" secondAttribute="top" id="jBH-y1-vEG"/>
+                            <constraint firstItem="uck-sy-EnB" firstAttribute="leading" secondItem="Hen-h4-pDu" secondAttribute="leading" id="mqs-Mj-WVr"/>
+                            <constraint firstAttribute="trailing" secondItem="uck-sy-EnB" secondAttribute="trailing" id="zWx-hK-eJr"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="Xv9-1B-Jl4"/>
                     </view>
                     <connections>
-                        <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
-                        <outlet property="searchTextField" destination="D32-xq-KoX" id="SNw-Og-HQe"/>
-                        <outlet property="tableView" destination="uck-sy-EnB" id="Hjl-iq-B54"/>
+                        <outlet property="tableView" destination="uck-sy-EnB" id="Pcy-7J-mwB"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RUc-mI-z20" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="140" y="106.59670164917542"/>
+            <point key="canvasLocation" x="847" y="107"/>
         </scene>
     </scenes>
 </document>

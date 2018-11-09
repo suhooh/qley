@@ -9,6 +9,7 @@ target 'Pley' do
   pod 'RxMKMapView','~> 4.3'
   pod 'Alamofire',  '~> 4.7'
   pod 'Kingfisher', '~> 4.10'
+  pod 'Pulley',     '~> 2.6'
 
   target 'PleyTests' do
     inherit! :search_paths
