@@ -15,6 +15,20 @@ class BusinessTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
 
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        let color = ratingView.superview?.backgroundColor
+        super.setSelected(selected, animated: animated)
+        // prevent background color from being cleared
+        if selected { ratingView.superview?.backgroundColor = color }
+    }
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        let color = ratingView.superview?.backgroundColor
+        super.setHighlighted(highlighted, animated: animated)
+        // prevent background color from being cleared
+        if highlighted { ratingView.superview?.backgroundColor = color }
+    }
+
     func setUp(with business: Business, index: Int) {
         nameLabel.text = "\(index + 1). \(business.name)"
         ratingView.rating = business.rating
