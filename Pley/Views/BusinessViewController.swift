@@ -10,6 +10,8 @@ class BusinessViewController: PulleyViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        animationDuration = 0.5
+
         viewModel = BusinessViewModel()
 
         guard let mapViewController = primaryContentViewController as? BusinessMapViewController,

@@ -47,30 +47,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-ct-N2E">
-                                <rect key="frame" x="170.5" y="6" width="34" height="5"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="0.70461047535211263" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="5" id="338-fE-awX"/>
-                                    <constraint firstAttribute="width" constant="34" id="B2r-gI-vvd"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <real key="value" value="2.5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search for restaurants" translatesAutoresizingMaskIntoConstraints="NO" id="EmS-Yc-d9h">
-                                <rect key="frame" x="6" y="7" width="363" height="56"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sz4-rG-mlj" userLabel="Header Section View">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="63"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FDD-ct-N2E" userLabel="Gripper View">
+                                        <rect key="frame" x="170.5" y="6" width="34" height="5"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="0.70461047535211263" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="5" id="338-fE-awX"/>
+                                            <constraint firstAttribute="width" constant="34" id="B2r-gI-vvd"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <real key="value" value="2.5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Search for restaurants" translatesAutoresizingMaskIntoConstraints="NO" id="EmS-Yc-d9h">
+                                        <rect key="frame" x="6" y="7" width="363" height="56"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
+                                        <scopeButtonTitles>
+                                            <string>Title</string>
+                                            <string>Title</string>
+                                        </scopeButtonTitles>
+                                    </searchBar>
+                                </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
-                                <scopeButtonTitles>
-                                    <string>Title</string>
-                                    <string>Title</string>
-                                </scopeButtonTitles>
-                            </searchBar>
+                                <constraints>
+                                    <constraint firstItem="EmS-Yc-d9h" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" constant="7" id="32O-U9-p5P"/>
+                                    <constraint firstAttribute="height" priority="750" constant="63" id="5Jl-DZ-6TS"/>
+                                    <constraint firstItem="EmS-Yc-d9h" firstAttribute="leading" secondItem="sz4-rG-mlj" secondAttribute="leading" constant="6" id="6KA-LW-BVc"/>
+                                    <constraint firstItem="FDD-ct-N2E" firstAttribute="centerX" secondItem="sz4-rG-mlj" secondAttribute="centerX" id="H1O-cE-w4U"/>
+                                    <constraint firstAttribute="trailing" secondItem="EmS-Yc-d9h" secondAttribute="trailing" constant="6" id="VhH-MD-Prj"/>
+                                    <constraint firstItem="FDD-ct-N2E" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" constant="6" id="jc6-Di-eOQ"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="110" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uck-sy-EnB">
-                                <rect key="frame" x="0.0" y="63" width="375" height="604"/>
+                                <rect key="frame" x="0.0" y="63" width="375" height="584"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessTableViewCell" rowHeight="110" id="25K-se-ISg" customClass="BusinessTableViewCell" customModule="Pley" customModuleProvider="target">
@@ -233,19 +247,18 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" id="AAq-Ot-PCd"/>
-                            <constraint firstItem="FDD-ct-N2E" firstAttribute="centerX" secondItem="Hen-h4-pDu" secondAttribute="centerX" id="OTq-7B-ktN"/>
-                            <constraint firstAttribute="trailing" secondItem="EmS-Yc-d9h" secondAttribute="trailing" constant="6" id="P3S-Se-anm"/>
-                            <constraint firstItem="EmS-Yc-d9h" firstAttribute="leading" secondItem="Hen-h4-pDu" secondAttribute="leading" constant="6" id="QJ7-cx-eaQ"/>
-                            <constraint firstAttribute="top" secondItem="EmS-Yc-d9h" secondAttribute="top" constant="-7" id="Zo2-gm-04c"/>
-                            <constraint firstAttribute="top" secondItem="FDD-ct-N2E" secondAttribute="top" constant="-6" id="fLn-rz-fJJ"/>
-                            <constraint firstItem="EmS-Yc-d9h" firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="top" id="jBH-y1-vEG"/>
+                            <constraint firstItem="Xv9-1B-Jl4" firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" constant="20" id="AAq-Ot-PCd"/>
+                            <constraint firstItem="sz4-rG-mlj" firstAttribute="width" secondItem="Hen-h4-pDu" secondAttribute="width" id="MRo-kl-Qfd"/>
+                            <constraint firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" id="O9F-yy-hOh"/>
+                            <constraint firstItem="uck-sy-EnB" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="bottom" id="WQT-ki-xU7"/>
                             <constraint firstItem="uck-sy-EnB" firstAttribute="leading" secondItem="Hen-h4-pDu" secondAttribute="leading" id="mqs-Mj-WVr"/>
+                            <constraint firstItem="sz4-rG-mlj" firstAttribute="centerX" secondItem="Xv9-1B-Jl4" secondAttribute="centerX" id="qpL-39-IE2"/>
                             <constraint firstAttribute="trailing" secondItem="uck-sy-EnB" secondAttribute="trailing" id="zWx-hK-eJr"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Xv9-1B-Jl4"/>
                     </view>
                     <connections>
+                        <outlet property="headerSectionHeightConstraint" destination="5Jl-DZ-6TS" id="Xg1-de-JBC"/>
                         <outlet property="searchBar" destination="EmS-Yc-d9h" id="2nA-jq-sHb"/>
                         <outlet property="tableView" destination="uck-sy-EnB" id="Pcy-7J-mwB"/>
                     </connections>

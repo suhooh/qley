@@ -1,11 +1,18 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Pulley
 
 class BusinessTableViewController: UIViewController {
 
+    private struct Constants {
+        static let searchBarHeight: CGFloat = 63.0
+        static let partialRevealedDrawerHeight: CGFloat = 264.0
+    }
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
 
     var viewModel: BusinessViewModel! {
         didSet {
@@ -19,11 +26,16 @@ class BusinessTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.pulleyViewController?.delegate = self
+
         // transparent search bar
         searchBar.barTintColor = .clear
         searchBar.backgroundImage = UIImage()
+    }
 
-        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 30))
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(bounceDrawer), userInfo: nil, repeats: false)
     }
 
     func bindView(with viewModel: BusinessViewModel) {
@@ -67,5 +79,28 @@ class BusinessTableViewController: UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+    }
+
+    @objc fileprivate func bounceDrawer() {
+        self.pulleyViewController?.bounceDrawer()
+    }
+}
+
+// MARK: - PulleyDrawerViewControllerDelegate
+
+extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
+    // For devices with a bottom safe area ( e.g. iPhone X )
+
+    func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
+        return Constants.searchBarHeight + (pulleyViewController?.currentDisplayMode == .drawer ? bottomSafeArea : 0.0)
+    }
+
+    func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
+        return Constants.partialRevealedDrawerHeight + (pulleyViewController?.currentDisplayMode == .drawer ? bottomSafeArea : 0.0)
+    }
+
+    func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
+        headerSectionHeightConstraint.constant = Constants.searchBarHeight + (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
+        // tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .panel
     }
 }
