@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxDataSources
 import Pulley
 
 class BusinessTableViewController: UIViewController {
@@ -37,16 +38,12 @@ class BusinessTableViewController: UIViewController {
         super.viewDidAppear(animated)
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(bounceDrawer), userInfo: nil, repeats: false)
     }
+    @objc fileprivate func bounceDrawer() { self.pulleyViewController?.bounceDrawer() }
 
     func bindView(with viewModel: BusinessViewModel) {
         searchBar.rx.text.orEmpty
             .bind(to: viewModel.searchText)
             .disposed(by: disposeBag)
-
-        //        viewModel.businesses
-        //            .map { "\($0.count) \($0.description)" }
-        //            .bind(to: logTextView.rx.text)
-        //            .disposed(by: disposeBag)
 
         searchBar.rx.searchButtonClicked
             .subscribe { _ in
@@ -72,12 +69,19 @@ class BusinessTableViewController: UIViewController {
 
     func bindTableView(with viewModel: BusinessViewModel) {
 
-        viewModel.businesses
-            .bind(to: tableView.rx.items(cellIdentifier: BusinessTableViewCell.reuseIdendifier,
-                                         cellType: BusinessTableViewCell.self)) { index, element, cell in
-                cell.setUp(with: element, index: index)
+        Observable.combineLatest(viewModel.autocompletes, viewModel.businesses) { (autocompletes, businesses) in
+            [ .AutocompleteSection(items: autocompletes.map { .AutocompleteSectionItem(text: $0) }),
+              .BusinessesSection(items: businesses.map { .BusinessesSectionItem(business: $0) }) ]
             }
+            .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
             .disposed(by: disposeBag)
+
+//        viewModel.businesses
+//            .bind(to: tableView.rx.items(cellIdentifier: BusinessTableViewCell.reuseIdendifier,
+//                                         cellType: BusinessTableViewCell.self)) { index, element, cell in
+//                cell.setUp(with: element, index: index)
+//            }
+//            .disposed(by: disposeBag)
 
 //        viewModel.autocompletes
 //            .bind(to: tableView.rx.items) { tableView, index, element in
@@ -86,12 +90,8 @@ class BusinessTableViewController: UIViewController {
 //                return cell
 //            }
 //            .disposed(by: disposeBag)
-
     }
 
-    @objc fileprivate func bounceDrawer() {
-        self.pulleyViewController?.bounceDrawer()
-    }
 }
 
 // MARK: - PulleyDrawerViewControllerDelegate
@@ -110,5 +110,59 @@ extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         headerSectionHeightConstraint.constant = Constants.searchBarHeight + (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
         // tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .panel
+    }
+}
+
+// MARK: - RxTableViewSectionedReloadDataSource
+
+extension BusinessTableViewController {
+
+    static var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
+        return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(
+            configureCell: { (dataSource, tableView, indexPath, _) in
+                switch dataSource[indexPath] {
+                case let .AutocompleteSectionItem(text):
+                    // TODO: custom cell
+                    let cell = UITableViewCell()
+                    cell.textLabel?.text = text
+                    return cell
+                case let .BusinessesSectionItem(business):
+                    let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
+                    cell.setUp(with: business, index: indexPath.row)
+                    return cell
+                }
+        })
+    }
+
+}
+
+// MARK: - MultipleSectionModel
+// type definition for multiple tableview data source
+
+enum MultipleSectionModel {
+    case AutocompleteSection(items: [SectionItem])
+    case BusinessesSection(items: [SectionItem])
+}
+
+enum SectionItem {
+    case AutocompleteSectionItem(text: String)
+    case BusinessesSectionItem(business: Business)
+}
+
+extension MultipleSectionModel: SectionModelType {
+    typealias Item = SectionItem
+
+    var items: [SectionItem] {
+        switch self {
+        case .AutocompleteSection(items: let items): return items.map { $0 }
+        case .BusinessesSection(items: let items):   return items.map { $0 }
+        }
+    }
+
+    init(original: MultipleSectionModel, items: [Item]) {
+        switch original {
+        case .AutocompleteSection(items: let items): self = .AutocompleteSection(items: items)
+        case .BusinessesSection(items: let items):   self = .BusinessesSection(items: items)
+        }
     }
 }

@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (4.7.3)
   - Cosmos (17.0.0)
+  - Differentiator (3.1.0)
   - Kingfisher (4.10.1)
   - Pulley (2.6.2)
   - RxAlamofire (4.3.0):
@@ -10,6 +11,10 @@ PODS:
     - RxSwift (~> 4)
   - RxAtomic (4.4.0)
   - RxCocoa (4.4.0):
+    - RxSwift (~> 4.0)
+  - RxDataSources (3.1.0):
+    - Differentiator (~> 3.0)
+    - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - RxMKMapView (4.3.0):
     - RxCocoa (~> 4.3)
@@ -25,6 +30,7 @@ DEPENDENCIES:
   - Pulley (~> 2.6)
   - RxAlamofire (~> 4.3)
   - RxCocoa (~> 4.4)
+  - RxDataSources (~> 3.1)
   - RxMKMapView (~> 4.3)
   - RxSwift (~> 4.4)
   - SwiftyJSON (~> 4.2)
@@ -33,11 +39,13 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Cosmos
+    - Differentiator
     - Kingfisher
     - Pulley
     - RxAlamofire
     - RxAtomic
     - RxCocoa
+    - RxDataSources
     - RxMKMapView
     - RxSwift
     - SwiftyJSON
@@ -45,15 +53,17 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Cosmos: 309e489f21ffc91a1eeecfebef7f817cd2fcfba6
+  Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
   Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
   Pulley: 2679a2b5a9714c5eb760b1fbb535d15c60e50fb4
   RxAlamofire: 09624d0f2d48ed8b686e4eb4cf68e28cbd2df556
   RxAtomic: eacf60db868c96bfd63320e28619fe29c179656f
   RxCocoa: df63ebf7b9a70d6b4eeea407ed5dd4efc8979749
+  RxDataSources: a843bad90c29817f5923ec8163f4af2de084ceb3
   RxMKMapView: 71f1a69a5e3b889662a6ec430006324974418d0c
   RxSwift: 5976ecd04fc2fefd648827c23de5e11157faa973
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 8b18f3e8f9f4a90bdc1c39a864a47daf453292b5
+PODFILE CHECKSUM: ddceea014c6261f19365fe496852be8a22c225cc
 
 COCOAPODS: 1.5.3
