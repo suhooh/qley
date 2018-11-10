@@ -59,15 +59,8 @@ class BusinessTableViewController: UIViewController {
         viewModel.businesses
             .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: Business) in
                 let indexPath = IndexPath(item: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as? BusinessTableViewCell else {
-                    return UITableViewCell()
-                }
-                cell.nameLabel.text = element.name
-                if let imageUrlString = element.imageUrl, let imageUrl = URL(string: imageUrlString) {
-                    cell.mainImageView.kf.setImage(with: imageUrl)
-                } else {
-                    // TODO: default placeholder
-                }
+                let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
+                cell.setUp(with: element, index: index)
                 return cell
             }
             .disposed(by: disposeBag)

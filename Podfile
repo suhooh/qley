@@ -10,6 +10,7 @@ target 'Pley' do
   pod 'Alamofire',  '~> 4.7'
   pod 'Kingfisher', '~> 4.10'
   pod 'Pulley',     '~> 2.6'
+  pod 'Cosmos',     '~> 17.0'
 
   target 'PleyTests' do
     inherit! :search_paths
