@@ -71,12 +71,11 @@ class BusinessTableViewController: UIViewController {
     }
 
     func bindTableView(with viewModel: BusinessViewModel) {
+
         viewModel.businesses
-            .bind(to: tableView.rx.items) { (tableView: UITableView, index: Int, element: Business) in
-                let indexPath = IndexPath(item: index, section: 0)
-                let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
+            .bind(to: tableView.rx.items(cellIdentifier: BusinessTableViewCell.reuseIdendifier,
+                                         cellType: BusinessTableViewCell.self)) { index, element, cell in
                 cell.setUp(with: element, index: index)
-                return cell
             }
             .disposed(by: disposeBag)
 
@@ -87,6 +86,7 @@ class BusinessTableViewController: UIViewController {
 //                return cell
 //            }
 //            .disposed(by: disposeBag)
+
     }
 
     @objc fileprivate func bounceDrawer() {
