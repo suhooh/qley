@@ -28,6 +28,7 @@
 		8BCBD41721961FEC00966CE8 /* BusinessTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41621961FEC00966CE8 /* BusinessTableViewController.swift */; };
 		8BCBD4192196B4A100966CE8 /* AutocompleteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4182196B4A100966CE8 /* AutocompleteResponse.swift */; };
 		8BCBD41B2196B58000966CE8 /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41A2196B58000966CE8 /* Term.swift */; };
+		8BCBD41D21976E1700966CE8 /* AutocompletTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */; };
 		9AB19307B6D78A9B812DEE8D /* Pods_PleyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		8BCBD41621961FEC00966CE8 /* BusinessTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessTableViewController.swift; sourceTree = "<group>"; };
 		8BCBD4182196B4A100966CE8 /* AutocompleteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResponse.swift; sourceTree = "<group>"; };
 		8BCBD41A2196B58000966CE8 /* Term.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Term.swift; sourceTree = "<group>"; };
+		8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompletTableViewCell.swift; sourceTree = "<group>"; };
 		BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PleyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED9FA96C83F2D753172388C8 /* Pods-PleyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PleyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PleyTests/Pods-PleyTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -187,6 +189,7 @@
 				8BCBD41421961B0500966CE8 /* BusinessMapViewController.swift */,
 				8BCBD41621961FEC00966CE8 /* BusinessTableViewController.swift */,
 				8BCBD4122195F75700966CE8 /* BusinessTableViewCell.swift */,
+				8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 			files = (
 				8BCBD41521961B0500966CE8 /* BusinessMapViewController.swift in Sources */,
 				8BCBD40B2194B85F00966CE8 /* BusinessSearchResponse.swift in Sources */,
+				8BCBD41D21976E1700966CE8 /* AutocompletTableViewCell.swift in Sources */,
 				8BCBD40D2194BA5900966CE8 /* BusinessViewModel.swift in Sources */,
 				8BCBD41721961FEC00966CE8 /* BusinessTableViewController.swift in Sources */,
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,

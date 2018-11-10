@@ -9,6 +9,8 @@ class BusinessTableViewController: UIViewController {
     private struct Constants {
         static let searchBarHeight: CGFloat = 63.0
         static let partialRevealedDrawerHeight: CGFloat = 264.0
+        static let autocompletedRowHeight: CGFloat = 60
+        static let businessRowHeight: CGFloat = 110
     }
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -29,9 +31,10 @@ class BusinessTableViewController: UIViewController {
 
         self.pulleyViewController?.delegate = self
 
-        // transparent search bar
+        // search bar UI
         searchBar.barTintColor = .clear
         searchBar.backgroundImage = UIImage()
+        (searchBar.value(forKey: "searchField") as? UITextField)?.textColor = .black
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -94,6 +97,13 @@ class BusinessTableViewController: UIViewController {
 
 }
 
+// MARK: - UITableViewDelegate
+extension BusinessTableViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == 0 ? Constants.autocompletedRowHeight : Constants.businessRowHeight
+    }
+}
+
 // MARK: - PulleyDrawerViewControllerDelegate
 
 extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
@@ -122,9 +132,8 @@ extension BusinessTableViewController {
             configureCell: { (dataSource, tableView, indexPath, _) in
                 switch dataSource[indexPath] {
                 case let .AutocompleteSectionItem(text):
-                    // TODO: custom cell
-                    let cell = UITableViewCell()
-                    cell.textLabel?.text = text
+                    let cell = tableView.dequeueReusableCell(withIdentifier: AutocompletTableViewCell.reuseIdendifier, for: indexPath) as! AutocompletTableViewCell
+                    cell.setUp(with: text)
                     return cell
                 case let .BusinessesSectionItem(business):
                     let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
