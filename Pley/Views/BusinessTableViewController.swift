@@ -17,10 +17,9 @@ class BusinessTableViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
 
-    var viewModel: BusinessViewModel! {
+    var viewModel: BusinessViewModel? {
         didSet {
-            bindView(with: viewModel)
-            bindTableView(with: viewModel)
+            bindViewModel()
         }
     }
 
@@ -43,22 +42,23 @@ class BusinessTableViewController: UIViewController {
     }
     @objc fileprivate func bounceDrawer() { self.pulleyViewController?.bounceDrawer() }
 
-    func bindView(with viewModel: BusinessViewModel) {
+    func bindViewModel() {
+        guard let viewModel = viewModel else { return }
+
         searchBar.rx.text.orEmpty
             .bind(to: viewModel.searchText)
             .disposed(by: disposeBag)
 
         searchBar.rx.searchButtonClicked
             .subscribe { _ in
-                self.searchBar.resignFirstResponder()
-                (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
+                self.searchBarResignFirstResponder()
             }
             .disposed(by: disposeBag)
 
         searchBar.rx.cancelButtonClicked
             .subscribe { _ in
                 self.searchBar.text = nil
-                self.searchBar.resignFirstResponder()
+                self.searchBarResignFirstResponder()
                 self.searchBar.setShowsCancelButton(false, animated: true)
             }
             .disposed(by: disposeBag)
@@ -68,33 +68,61 @@ class BusinessTableViewController: UIViewController {
                 self.searchBar.setShowsCancelButton(true, animated: true)
             }
             .disposed(by: disposeBag)
-    }
 
-    func bindTableView(with viewModel: BusinessViewModel) {
-
-        Observable.combineLatest(viewModel.autocompletes, viewModel.businesses) { (autocompletes, businesses) in
-            [ .AutocompleteSection(items: autocompletes.map { .AutocompleteSectionItem(text: $0) }),
-              .BusinessesSection(items: businesses.map { .BusinessesSectionItem(business: $0) }) ]
+        // Merge two observables to show one of the latest event between autocompletions or businesses
+        Observable.of(
+            viewModel.autocompletes.map { MultipleSectionModel.AutocompleteSection(items: $0.map { s in SectionItem.AutocompleteSectionItem(text: s) }) },
+            viewModel.businesses.map { MultipleSectionModel.BusinessesSection(items: $0.map { b in SectionItem.BusinessesSectionItem(business: b)}) }
+            )
+            .merge()
+            .map { data -> [MultipleSectionModel] in
+                guard let item = data.items.first else { return [] }
+                // return [AutocompleteSection, BusinessesSection] all the time
+                switch item {
+                case .AutocompleteSectionItem(_):
+                    return [data, .BusinessesSection(items: [])]
+                case .BusinessesSectionItem(_):
+                    return [.AutocompleteSection(items: []), data]
+                }
             }
             .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
             .disposed(by: disposeBag)
 
-//        viewModel.businesses
-//            .bind(to: tableView.rx.items(cellIdentifier: BusinessTableViewCell.reuseIdendifier,
-//                                         cellType: BusinessTableViewCell.self)) { index, element, cell in
-//                cell.setUp(with: element, index: index)
+// RxDataSources - two different cells by each section
+//        Observable.combineLatest(viewModel.autocompletes, viewModel.businesses) { (autocompletes, businesses) in
+//            [ .AutocompleteSection(items: autocompletes.map { .AutocompleteSectionItem(text: $0) }),
+//              .BusinessesSection(items: businesses.map { .BusinessesSectionItem(business: $0) }) ]
 //            }
+//            .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
 //            .disposed(by: disposeBag)
 
-//        viewModel.autocompletes
-//            .bind(to: tableView.rx.items) { tableView, index, element in
-//                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
-//                cell.textLabel?.text = element
-//                return cell
+// two types of cells with single section
+//        Observable.of(
+//            viewModel.autocompletes.map { MultipleSectionModel.AutocompleteSection(items: $0.map { s in .AutocompleteSectionItem(text: s) }) },
+//            viewModel.businesses.map { MultipleSectionModel.BusinessesSection(items: $0.map { b in .BusinessesSectionItem(business: b)}) }
+//            )
+//            .merge()
+//            .map { $0.items }
+//            .bind(to: tableView.rx.items) { tableView, index, item in
+//                let indexPath = IndexPath(item: index, section: 0)
+//                switch item {
+//                case let .AutocompleteSectionItem(text):
+//                    let cell = tableView.dequeueReusableCell(withIdentifier: AutocompletTableViewCell.reuseIdendifier, for: indexPath) as! AutocompletTableViewCell
+//                    cell.setUp(with: text)
+//                    return cell
+//                case let .BusinessesSectionItem(business):
+//                    let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
+//                    cell.setUp(with: business, index: indexPath.row)
+//                    return cell
+//                }
 //            }
 //            .disposed(by: disposeBag)
     }
 
+    func searchBarResignFirstResponder() {
+        self.searchBar.resignFirstResponder()
+        (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
+    }
 }
 
 // MARK: - UITableViewDelegate
@@ -120,6 +148,7 @@ extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         headerSectionHeightConstraint.constant = Constants.searchBarHeight + (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
         // tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .panel
+        if drawer.drawerPosition != .open { searchBarResignFirstResponder() }
     }
 }
 

@@ -8,11 +8,11 @@ import Kingfisher
 class BusinessMapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
 
-    var viewModel: BusinessViewModel! {
+    var viewModel: BusinessViewModel? {
         didSet {
-            bindMapView(with: viewModel)
+            bindViewModel()
             // TODO: remove
-            centerMapOnLocation(location: viewModel.location)
+            centerMapOnLocation(location: viewModel!.location)
         }
     }
     private let disposeBag = DisposeBag()
@@ -21,7 +21,9 @@ class BusinessMapViewController: UIViewController {
         super.viewDidLoad()
     }
 
-    func bindMapView(with viewModel: BusinessViewModel) {
+    func bindViewModel() {
+        guard let viewModel = viewModel else { return }
+
         mapView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
