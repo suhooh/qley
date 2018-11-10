@@ -11,7 +11,8 @@ class YelpAPIService {
     }
 
     enum Resource: String {
-        case BusinessSearch = "businesses/search"
+        case businessSearch = "businesses/search"
+        case autocomplete = "autocomplete"
 
         var path: String { return Constants.baseURL + rawValue }
     }
@@ -28,10 +29,23 @@ class YelpAPIService {
             "longitude" : String(longitude)
         ]
 
-        return RxAlamofire.requestJSON(.get, Resource.BusinessSearch.path, parameters: params, encoding: URLEncoding.default, headers: headers)
+        return RxAlamofire.requestJSON(.get, Resource.businessSearch.path, parameters: params, encoding: URLEncoding.default, headers: headers)
             .flatMap { (_, json) -> Observable<BusinessSearchResponse> in
                 guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else { return Observable.error(APIError.parseFailed) }
                 return Observable.just(businessSearchResponse)
             }
+    }
+
+    func autocomplete(_ term: String, latitude: Double?, longitude: Double?) -> Observable<AutocompleteResponse> {
+        let headers = ["Authorization": Constants.APIKey]
+        var params = [ "text": term.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "" ]
+        if let latitude = latitude { params["latitude"] = String(latitude) }
+        if let longitude = longitude { params["longitude"] = String(longitude) }
+
+        return RxAlamofire.requestJSON(.get, Resource.autocomplete.path, parameters: params, encoding: URLEncoding.default, headers: headers)
+            .flatMap { (_, json) -> Observable<AutocompleteResponse> in
+                guard let autocompleteResponse = AutocompleteResponse(JSON(json)) else { return Observable.error(APIError.parseFailed) }
+                return Observable.just(autocompleteResponse)
+        }
     }
 }

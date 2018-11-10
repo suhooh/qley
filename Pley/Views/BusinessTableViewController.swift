@@ -79,6 +79,14 @@ class BusinessTableViewController: UIViewController {
                 return cell
             }
             .disposed(by: disposeBag)
+
+//        viewModel.autocompletes
+//            .bind(to: tableView.rx.items) { tableView, index, element in
+//                let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+//                cell.textLabel?.text = element
+//                return cell
+//            }
+//            .disposed(by: disposeBag)
     }
 
     @objc fileprivate func bounceDrawer() {

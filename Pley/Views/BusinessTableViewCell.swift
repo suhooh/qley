@@ -17,13 +17,20 @@ class BusinessTableViewCell: UITableViewCell {
 
     func setUp(with business: Business, index: Int) {
         nameLabel.text = "\(index + 1). \(business.name)"
-        ratingView.rating = business.rating
+        ratingView.rating = business.rating ?? 0
 
         let distance = business.distance == nil ? "" : String(format: " \u{2022} %0.2fkm", business.distance! / 1000 )
-        reviewLabel.text = "\(business.reviewCount) reviews\(distance)"
+        reviewLabel.text = "\(business.reviewCount ?? 0) reviews\(distance)"
 
-        let price = business.price.isEmpty ? "" : "\(business.price) \u{2022} "
-        priceAndCagegoriesLabel.text = "\(price)\(business.categories.compactMap({ $0.title }).joined(separator: ", "))"
+        var priceString = ""
+        if let price = business.price, !price.isEmpty {
+            priceString = "\(price) \u{2022} "
+        }
+        var categoryString = ""
+        if let categories = business.categories {
+            categoryString = categories.compactMap({ $0.title }).joined(separator: ", ")
+        }
+        priceAndCagegoriesLabel.text = "\(priceString)\(categoryString)"
 
         if let address = business.location?.displayAddress, !address.isEmpty {
             addressLabel.text = address.joined(separator: ", ")

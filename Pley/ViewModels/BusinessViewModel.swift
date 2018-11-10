@@ -8,6 +8,9 @@ final class BusinessViewModel {
     private let disposeBag = DisposeBag()
 
     let searchText = Variable<String>("")
+    private let autocompleteResponse: Observable<AutocompleteResponse>
+    let autocompletes: Observable<[String]>
+
     private let businessSearchResponse: Observable<BusinessSearchResponse>
     let businesses: Observable<[Business]>
     let annotations: Observable<[BusinessAnnotation]>
@@ -19,6 +22,15 @@ final class BusinessViewModel {
 
     init(_ yelpApiService: YelpAPIService = YelpAPIService()) {
         self.yelpApiService = yelpApiService
+
+        autocompleteResponse = searchText.asObservable()
+            .distinctUntilChanged()
+            .flatMapLatest { $0.isEmpty ? Observable.empty() : yelpApiService.autocomplete($0, latitude: 21.282778, longitude: -157.829444) }
+            .share(replay: 1)
+
+        autocompletes = autocompleteResponse.map { response -> [String] in
+            return (response.terms?.compactMap { $0.text } ?? []) + (response.categories?.compactMap { $0.title } ?? [])
+        }
 
         businessSearchResponse = searchText.asObservable()
             .debounce(0.3, scheduler: MainScheduler.instance)
