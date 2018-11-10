@@ -26,12 +26,12 @@ class BusinessViewController: PulleyViewController {
     }
 
     @objc func keyboardWillAppear() {
-        guard [.closed, .collapsed].contains(drawerPosition) else { return }
-        setDrawerPosition(position: .partiallyRevealed, animated: true)
+        guard drawerPosition != .open else { return }
+        setDrawerPosition(position: .open, animated: true)
     }
 
     @objc func keyboardWillDisappear() {
-//        setDrawerPosition(position: .partiallyRevealed, animated: true)
+        setDrawerPosition(position: .partiallyRevealed, animated: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {

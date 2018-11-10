@@ -22,6 +22,8 @@ class BusinessTableViewController: UIViewController {
         // transparent search bar
         searchBar.barTintColor = .clear
         searchBar.backgroundImage = UIImage()
+
+        tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 30))
     }
 
     func bindView(with viewModel: BusinessViewModel) {
@@ -37,6 +39,7 @@ class BusinessTableViewController: UIViewController {
         searchBar.rx.searchButtonClicked
             .subscribe { _ in
                 self.searchBar.resignFirstResponder()
+                (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
             }
             .disposed(by: disposeBag)
 
