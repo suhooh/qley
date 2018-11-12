@@ -21,7 +21,8 @@ class YelpAPIService {
         case parseFailed
     }
 
-    func search(_ term: String, latitude: Double, longitude: Double) -> Observable<BusinessSearchResponse> {
+    func search(_ term: String,
+                latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
         let searchTerm = term.trimmingCharacters(in: .whitespacesAndNewlines)
             .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
 
@@ -29,7 +30,8 @@ class YelpAPIService {
         let params = [
             "term": searchTerm,
             "latitude": String(latitude),
-            "longitude": String(longitude)
+            "longitude": String(longitude),
+            "radius": String(min(radius, 40000))
         ]
 
         return RxAlamofire.requestJSON(.get, Resource.businessSearch.path,

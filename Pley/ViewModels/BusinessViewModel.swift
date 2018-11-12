@@ -8,7 +8,7 @@ final class BusinessViewModel: ViewModelType {
     struct Input {
         let searchText: Variable<String>
         let doSearch: AnyObserver<Void>
-        let coordinateRegion: Variable<MKCoordinateRegion>
+        let regionAndRadius: Variable<(MKCoordinateRegion, Double)>
     }
 
     struct Output {
@@ -22,28 +22,19 @@ final class BusinessViewModel: ViewModelType {
 
     private let searchText = Variable<String>("")
     private let doSearchSubject = PublishSubject<Void>()
-    private let coordinateRegion = Variable<MKCoordinateRegion>(MKCoordinateRegion())
-
-    // TODO: live location
-//    let location = CLLocation(latitude: 21.282778, longitude: -157.829444)
-//    private let regionRadius: CLLocationDistance = 1000
+    private let regionAndRadius = Variable<(MKCoordinateRegion, Double)>((MKCoordinateRegion(), 0.0))
 
     init() {
         let yelpApiService = YelpAPIService()
 
-//        let businessSearchResponse = doSearchSubject
-//            .withLatestFrom(searchText.asObservable())
-//            .flatMapLatest { $0.isEmpty
-//                ? Observable.empty()
-//                : yelpApiService.search($0, latitude: 21.282778, longitude: -157.829444)
-//            }
-//            .share(replay: 1)
-
         let businessSearchResponse = doSearchSubject
-            .withLatestFrom(Observable.combineLatest(searchText.asObservable(), coordinateRegion.asObservable()))
+            .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
             .flatMapLatest { $0.0.isEmpty
                 ? Observable<BusinessSearchResponse>.empty()
-                : yelpApiService.search($0.0, latitude: $0.1.center.latitude, longitude: $0.1.center.longitude)
+                : yelpApiService.search($0.0,
+                                        latitude: $0.1.0.center.latitude,
+                                        longitude: $0.1.0.center.longitude,
+                                        radius: Int($0.1.1))
             }
             .share(replay: 1)
 
@@ -56,13 +47,13 @@ final class BusinessViewModel: ViewModelType {
         }
 
         let autocompleteResponse = Observable
-            .combineLatest(searchText.asObservable(), coordinateRegion.asObservable())
+            .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
             .distinctUntilChanged { $0.0 == $1.0 }
             .flatMapLatest { $0.0.isEmpty
                 ? Observable<AutocompleteResponse>.empty()
                 : yelpApiService.autocomplete($0.0,
-                                              latitude: $0.1.center.latitude,
-                                              longitude: $0.1.center.longitude)
+                                              latitude: $0.1.0.center.latitude,
+                                              longitude: $0.1.0.center.longitude)
             }
             .share(replay: 1)
 
@@ -75,6 +66,6 @@ final class BusinessViewModel: ViewModelType {
                              autocompletes: autocompletes)
         self.input = Input(searchText: searchText,
                            doSearch: doSearchSubject.asObserver(),
-                           coordinateRegion: coordinateRegion)
+                           regionAndRadius: regionAndRadius)
     }
 }

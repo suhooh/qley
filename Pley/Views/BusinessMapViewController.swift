@@ -10,7 +10,7 @@ import Pulley
 class BusinessMapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var userTrackButtonView: UIView!
-    @IBOutlet var userTrackButtonViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var userTrackButtonViewBottomConstraint: NSLayoutConstraint!
 
     var viewModel: BusinessViewModel? {
         didSet {
@@ -23,30 +23,15 @@ class BusinessMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         checkLocationAuthorizationStatus()
-        locationManager.startUpdatingLocation()
     }
 
     func checkLocationAuthorizationStatus() {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            mapView.showsUserLocation = true
-            addMapTrackingButton()
+            trackUserLocation()
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
-    }
-
-    func addMapTrackingButton() {
-        trackButton = MKUserTrackingButton(mapView: mapView)
-        if let btn = trackButton {
-            userTrackButtonView.addSubview(btn)
-            userTrackButtonView.isHidden = false
-        }
-    }
-
-    @objc func centerMapOnUserButtonClicked() {
-        mapView.setUserTrackingMode(MKUserTrackingMode.follow, animated: true)
     }
 
     func bindViewModel() {
@@ -57,20 +42,17 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
 
         mapView.rx.region
-            .do(onNext: { region in
-                print("Map region is now \(region)")
-            })
-            .bind(to: viewModel.input.coordinateRegion)
+            .map { [unowned self] region in
+                return (region, self.mapView.currentRadius)
+            }
+            .bind(to: viewModel.input.regionAndRadius)
             .disposed(by: disposeBag)
-
-//        mapView.rx.regionDidChangeAnimated
-//            .subscribe(onNext: { _ in
-//                print("Map region changed")
-//            })
-//            .disposed(by: disposeBag)
 
         viewModel.output.annotations
             .asDriver(onErrorJustReturn: [])
+            .do(onNext: { annotations in
+                self.mapView.showAnnotations(annotations, animated: true)
+            })
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
 
@@ -82,8 +64,9 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
 
         locationManager.rx.didChangeAuthorization
-            .debug("MAP:: didChangeAuthorization")
-            .subscribe(onNext: { event in print(event) })
+            .subscribe({ [unowned self] _ in
+                self.trackUserLocation()
+            })
             .disposed(by: disposeBag)
     }
 
@@ -92,6 +75,28 @@ class BusinessMapViewController: UIViewController {
                                                   latitudinalMeters: 1000,
                                                   longitudinalMeters: 1000)
         mapView.setRegion(coordinateRegion, animated: true)
+    }
+
+    func trackUserLocation() {
+        mapView.showsUserLocation = true
+        trackButton = MKUserTrackingButton(mapView: mapView)
+        if let btn = trackButton {
+            userTrackButtonView.addSubview(btn)
+            userTrackButtonView.isHidden = false
+        }
+        locationManager.startUpdatingLocation()
+    }
+
+    func showAnnotationsInVisibleRegion(offset: CGFloat) {
+        var totalMapRect = MKMapRect.null
+        for annotation in mapView.annotations {
+            let annotationPoint = MKMapPoint(annotation.coordinate)
+            let mapRect = MKMapRect.init(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
+            totalMapRect = totalMapRect.union(mapRect)
+        }
+        mapView.setVisibleMapRect(totalMapRect,
+                                  edgePadding: UIEdgeInsets(top: 30, left: 30, bottom: 30 + offset, right: 30),
+                                  animated: true)
     }
 }
 
@@ -124,7 +129,11 @@ extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
             return
         }
 
-        userTrackButtonViewBottomConstraint.constant = trackButtonBottomDistance +
+        let properBottomConstraint = trackButtonBottomDistance +
             (distance <= partialRevealedDrawerHeight + bottomSafeArea ? distance : partialRevealedDrawerHeight)
+        userTrackButtonViewBottomConstraint.constant = properBottomConstraint
+        if mapView.annotations.count > 1 {
+            showAnnotationsInVisibleRegion(offset: properBottomConstraint)
+        }
     }
 }

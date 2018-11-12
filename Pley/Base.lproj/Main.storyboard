@@ -41,7 +41,7 @@
                             <constraint firstAttribute="bottom" secondItem="dGe-Ad-Suh" secondAttribute="bottom" constant="8" id="B9B-pJ-c9d"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
-                            <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
+                            <constraint firstAttribute="bottom" secondItem="ZnJ-7C-Zas" secondAttribute="bottom" id="eHa-fy-IvA"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="wuk-sm-m7W"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
