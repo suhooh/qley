@@ -44,7 +44,7 @@ class BusinessMapViewController: UIViewController {
             })
             .disposed(by: disposeBag)
 
-        viewModel.annotations
+        viewModel.output.annotations
             .asDriver(onErrorJustReturn: [])
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)

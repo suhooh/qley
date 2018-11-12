@@ -29,6 +29,7 @@
 		8BCBD4192196B4A100966CE8 /* AutocompleteResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4182196B4A100966CE8 /* AutocompleteResponse.swift */; };
 		8BCBD41B2196B58000966CE8 /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41A2196B58000966CE8 /* Term.swift */; };
 		8BCBD41D21976E1700966CE8 /* AutocompletTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */; };
+		8BCBD41F2197B1F800966CE8 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD41E2197B1F800966CE8 /* ViewModelType.swift */; };
 		9AB19307B6D78A9B812DEE8D /* Pods_PleyTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +73,7 @@
 		8BCBD4182196B4A100966CE8 /* AutocompleteResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompleteResponse.swift; sourceTree = "<group>"; };
 		8BCBD41A2196B58000966CE8 /* Term.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Term.swift; sourceTree = "<group>"; };
 		8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutocompletTableViewCell.swift; sourceTree = "<group>"; };
+		8BCBD41E2197B1F800966CE8 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
 		BFB69DA5E6F00C18CA9F1378 /* Pods_PleyTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PleyTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED9FA96C83F2D753172388C8 /* Pods-PleyTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PleyTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PleyTests/Pods-PleyTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -169,6 +171,7 @@
 		8BCBD3FD2194A58A00966CE8 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				8BCBD41E2197B1F800966CE8 /* ViewModelType.swift */,
 				8BCBD40C2194BA5900966CE8 /* BusinessViewModel.swift */,
 			);
 			path = ViewModels;
@@ -408,6 +411,7 @@
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,
 				8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */,
 				8BCBD3B32194A42900966CE8 /* BusinessViewController.swift in Sources */,
+				8BCBD41F2197B1F800966CE8 /* ViewModelType.swift in Sources */,
 				8BCBD4132195F75700966CE8 /* BusinessTableViewCell.swift in Sources */,
 				8BCBD3B12194A42900966CE8 /* AppDelegate.swift in Sources */,
 				8BCBD4192196B4A100966CE8 /* AutocompleteResponse.swift in Sources */,

@@ -24,7 +24,7 @@ class YelpAPIService {
     func search(_ term: String, latitude: Double, longitude: Double) -> Observable<BusinessSearchResponse> {
         let headers = ["Authorization": Constants.APIKey]
         let params = [
-            "term": term.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "",
+            "term": term.trimmingCharacters(in: .whitespacesAndNewlines).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "",
             "latitude": String(latitude),
             "longitude" : String(longitude)
         ]
@@ -38,7 +38,7 @@ class YelpAPIService {
 
     func autocomplete(_ term: String, latitude: Double?, longitude: Double?) -> Observable<AutocompleteResponse> {
         let headers = ["Authorization": Constants.APIKey]
-        var params = [ "text": term.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "" ]
+        var params = [ "text": term.trimmingCharacters(in: .whitespacesAndNewlines).addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "" ]
         if let latitude = latitude { params["latitude"] = String(latitude) }
         if let longitude = longitude { params["longitude"] = String(longitude) }
 
