@@ -22,21 +22,24 @@ final class BusinessViewModel: ViewModelType {
     private let searchText = Variable<String>("")
     private let doSearchSubject = PublishSubject<Void>()
 
-
-
     // TODO: live location
     let location = CLLocation(latitude: 21.282778, longitude: -157.829444)
     private let regionRadius: CLLocationDistance = 1000
-    let coordinateRegion = Variable<MKCoordinateRegion>(MKCoordinateRegion(center: CLLocation(latitude: 21.282778, longitude: -157.829444).coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000))
-
-
+    let coordinateRegion = Variable<MKCoordinateRegion>(
+        MKCoordinateRegion(center: CLLocation(latitude: 21.282778, longitude: -157.829444).coordinate,
+                           latitudinalMeters: 1000,
+                           longitudinalMeters: 1000)
+    )
 
     init() {
         let yelpApiService = YelpAPIService()
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(searchText.asObservable())
-            .flatMapLatest { $0.isEmpty ? Observable.empty() : yelpApiService.search($0, latitude: 21.282778, longitude: -157.829444) }
+            .flatMapLatest { $0.isEmpty
+                ? Observable.empty()
+                : yelpApiService.search($0, latitude: 21.282778, longitude: -157.829444)
+            }
             .share(replay: 1)
 
         let businesses = businessSearchResponse.map { $0.businesses }
@@ -49,7 +52,10 @@ final class BusinessViewModel: ViewModelType {
 
         let autocompleteResponse = searchText.asObservable()
             .distinctUntilChanged()
-            .flatMapLatest { $0.isEmpty ? Observable.empty() : yelpApiService.autocomplete($0, latitude: 21.282778, longitude: -157.829444) }
+            .flatMapLatest { $0.isEmpty
+                ? Observable.empty()
+                : yelpApiService.autocomplete($0, latitude: 21.282778, longitude: -157.829444)
+            }
             .share(replay: 1)
 
         let autocompletes = autocompleteResponse.map { response -> [String] in

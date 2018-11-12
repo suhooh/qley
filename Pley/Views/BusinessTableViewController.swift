@@ -38,10 +38,19 @@ class BusinessTableViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [unowned self] _ in self.pulleyViewController?.bounceDrawer() }
+//        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [unowned self] _ in
+//            self.pulleyViewController?.bounceDrawer()
+//        }
     }
 
     func bindViewModel() {
+        guard viewModel != nil else { return }
+
+        bindSearchBar()
+        bindTableView()
+    }
+
+    func bindSearchBar() {
         guard let viewModel = viewModel else { return }
 
         searchBar.rx.text.orEmpty
@@ -68,57 +77,44 @@ class BusinessTableViewController: UIViewController {
                 self.searchBar.setShowsCancelButton(true, animated: true)
             }
             .disposed(by: disposeBag)
+    }
+
+    func bindTableView() {
+        guard let viewModel = viewModel else { return }
 
         /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or businesses
         Observable.of(
             viewModel.output.autocompletes
-                .map { MultipleSectionModel.AutocompleteSection(items: $0.map { s in SectionItem.AutocompleteSectionItem(text: s) }) },
+                .map { MultipleSectionModel.autocompleteSection(items: $0.map { str in
+                    SectionItem.autocompleteSectionItem(text: str)
+                })
+            },
             viewModel.output.businesses
-                .map { MultipleSectionModel.BusinessesSection(items: $0.map { b in SectionItem.BusinessesSectionItem(business: b)}) }
-            )
+                .map { MultipleSectionModel.businessesSection(items: $0.map { bsn in
+                    SectionItem.businessesSectionItem(business: bsn)
+                })
+            })
             .merge()
             .map { data -> [MultipleSectionModel] in
                 guard let item = data.items.first else { return [] }
                 switch item {
                 // returns [AutocompleteSection, BusinessesSection] all the time
-                case .AutocompleteSectionItem(_): return [data, .BusinessesSection(items: [])]
-                case .BusinessesSectionItem(_): return [.AutocompleteSection(items: []), data]
+                case .autocompleteSectionItem: return [data, .businessesSection(items: [])]
+                case .businessesSectionItem: return [.autocompleteSection(items: []), data]
                 }
             }
             .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
             .disposed(by: disposeBag)
 
-        /// RxSwift - Two types of cells with single section
-        //        Observable.of(
-        //            viewModel.output.autocompletes.map { MultipleSectionModel.AutocompleteSection(items: $0.map { s in .AutocompleteSectionItem(text: s) }) },
-        //            viewModel.output.businesses.map { MultipleSectionModel.BusinessesSection(items: $0.map { b in .BusinessesSectionItem(business: b)}) }
-        //            )
-        //            .merge()
-        //            .map { $0.items }
-        //            .bind(to: tableView.rx.items) { tableView, index, item in
-        //                let indexPath = IndexPath(item: index, section: 0)
-        //                switch item {
-        //                case let .AutocompleteSectionItem(text):
-        //                    let cell = tableView.dequeueReusableCell(withIdentifier: AutocompletTableViewCell.reuseIdendifier, for: indexPath) as! AutocompletTableViewCell
-        //                    cell.setUp(with: text)
-        //                    return cell
-        //                case let .BusinessesSectionItem(business):
-        //                    let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
-        //                    cell.setUp(with: business, index: indexPath.row)
-        //                    return cell
-        //                }
-        //            }
-        //            .disposed(by: disposeBag)
-
         tableView.rx.modelSelected(SectionItem.self)
             .map { model -> String? in
                 switch model {
-                case let .AutocompleteSectionItem(text): return text
-                case .BusinessesSectionItem(_): return nil  // TODO: move to detail screen
+                case let .autocompleteSectionItem(text): return text
+                case .businessesSectionItem: return nil  // TODO: move to detail screen
                 }
             }
-            .do(onNext: { [unowned self] s in
-                if s != nil { self.searchBar.text = s }
+            .do(onNext: { [unowned self] str in
+                if str != nil { self.searchBar.text = str }
                 self.searchBarResignFirstResponder()
             })
             .map { _ in }
@@ -149,11 +145,13 @@ extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
     }
 
     func partialRevealDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
-        return Constants.partialRevealedDrawerHeight + (pulleyViewController?.currentDisplayMode == .drawer ? bottomSafeArea : 0.0)
+        return Constants.partialRevealedDrawerHeight +
+            (pulleyViewController?.currentDisplayMode == .drawer ? bottomSafeArea : 0.0)
     }
 
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
-        headerSectionHeightConstraint.constant = Constants.searchBarHeight + (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
+        headerSectionHeightConstraint.constant = Constants.searchBarHeight +
+            (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
         // tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .panel
         if drawer.drawerPosition != .open { searchBarResignFirstResponder() }
     }
@@ -167,12 +165,18 @@ extension BusinessTableViewController {
         return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(
             configureCell: { (dataSource, tableView, indexPath, _) in
                 switch dataSource[indexPath] {
-                case let .AutocompleteSectionItem(text):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: AutocompletTableViewCell.reuseIdendifier, for: indexPath) as! AutocompletTableViewCell
+                case let .autocompleteSectionItem(text):
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: AutocompletTableViewCell.reuseIdendifier,
+                        for: indexPath) as? AutocompletTableViewCell
+                        else { return UITableViewCell() }
                     cell.setUp(with: text)
                     return cell
-                case let .BusinessesSectionItem(business):
-                    let cell = tableView.dequeueReusableCell(withIdentifier: BusinessTableViewCell.reuseIdendifier, for: indexPath) as! BusinessTableViewCell
+                case let .businessesSectionItem(business):
+                    guard let cell = tableView.dequeueReusableCell(
+                        withIdentifier: BusinessTableViewCell.reuseIdendifier,
+                        for: indexPath) as? BusinessTableViewCell
+                        else { return UITableViewCell() }
                     cell.setUp(with: business, index: indexPath.row)
                     return cell
                 }
@@ -185,13 +189,13 @@ extension BusinessTableViewController {
 // type wrapper definition for multiple tableview data source
 
 enum MultipleSectionModel {
-    case AutocompleteSection(items: [SectionItem])
-    case BusinessesSection(items: [SectionItem])
+    case autocompleteSection(items: [SectionItem])
+    case businessesSection(items: [SectionItem])
 }
 
 enum SectionItem {
-    case AutocompleteSectionItem(text: String)
-    case BusinessesSectionItem(business: Business)
+    case autocompleteSectionItem(text: String)
+    case businessesSectionItem(business: Business)
 }
 
 extension MultipleSectionModel: SectionModelType {
@@ -199,15 +203,15 @@ extension MultipleSectionModel: SectionModelType {
 
     var items: [SectionItem] {
         switch self {
-        case .AutocompleteSection(items: let items): return items.map { $0 }
-        case .BusinessesSection(items: let items):   return items.map { $0 }
+        case .autocompleteSection(items: let items): return items.map { $0 }
+        case .businessesSection(items: let items):   return items.map { $0 }
         }
     }
 
     init(original: MultipleSectionModel, items: [Item]) {
         switch original {
-        case .AutocompleteSection(items: let items): self = .AutocompleteSection(items: items)
-        case .BusinessesSection(items: let items):   self = .BusinessesSection(items: items)
+        case .autocompleteSection(items: let items): self = .autocompleteSection(items: items)
+        case .businessesSection(items: let items):   self = .businessesSection(items: items)
         }
     }
 }

@@ -52,7 +52,9 @@ class BusinessMapViewController: UIViewController {
 
     // TODO: remove
     func centerMapOnLocation(location: CLLocation) {
-        let coordinateRegion = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+        let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
+                                                  latitudinalMeters: 1000,
+                                                  longitudinalMeters: 1000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 }

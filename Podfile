@@ -12,6 +12,7 @@ target 'Pley' do
   pod 'Kingfisher',    '~> 4.10'
   pod 'Pulley',        '~> 2.6'
   pod 'Cosmos',        '~> 17.0'
+  pod 'SwiftLint',     '~> 0.27'
 
   target 'PleyTests' do
     inherit! :search_paths
