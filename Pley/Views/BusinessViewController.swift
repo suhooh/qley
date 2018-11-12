@@ -4,15 +4,12 @@ import RxSwift
 
 class BusinessViewController: PulleyViewController {
 
-    private var viewModel: BusinessViewModel!
-    private let disposeBag = DisposeBag()
+    private let viewModel = BusinessViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         animationDuration = 0.5
-
-        viewModel = BusinessViewModel()
 
         guard let mapViewController = primaryContentViewController as? BusinessMapViewController,
             let tableViewController = drawerContentViewController as? BusinessTableViewController

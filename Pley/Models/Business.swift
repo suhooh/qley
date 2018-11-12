@@ -4,11 +4,11 @@ import SwiftyJSON
 struct Business {
     let id: String
     let name: String
-    let reviewCount: Int
-    let rating: Double
-    let price: String
-    let categories: [Category]
 
+    let reviewCount: Int?
+    let rating: Double?
+    let price: String?
+    let categories: [Category]?
     let alias: String?
     let isClosed: Bool?
     let url: String?
@@ -25,10 +25,10 @@ struct Business {
 
         self.id = id
         self.name = name
-        self.reviewCount = json["review_count"].int ?? 0
-        self.rating = json["rating"].double ?? 0
-        self.price = json["price"].string ?? ""
-        self.categories = json["categories"].array?.compactMap(Category.init) ?? []
+        self.reviewCount = json["review_count"].int
+        self.rating = json["rating"].double
+        self.price = json["price"].string
+        self.categories = json["categories"].array?.compactMap(Category.init)
         
         // Optionals
         self.alias =  json["alias"].string
