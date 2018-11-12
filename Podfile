@@ -2,11 +2,12 @@ platform :ios, '9.0'
 
 target 'Pley' do
   use_frameworks!
-  pod 'RxSwift',       '~> 4.4'
-  pod 'RxCocoa',       '~> 4.4'
+  pod 'RxSwift',       '~> 4.3'
+  pod 'RxCocoa',       '~> 4.3'
   pod 'RxAlamofire',   '~> 4.3'
   pod 'RxMKMapView',   '~> 4.3'
   pod 'RxDataSources', '~> 3.1'
+  pod 'RxCoreLocation','~> 1.3.1'
   pod 'SwiftyJSON',    '~> 4.2'
   pod 'Alamofire',     '~> 4.7'
   pod 'Kingfisher',    '~> 4.10'

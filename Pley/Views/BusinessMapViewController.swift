@@ -1,6 +1,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import RxCoreLocation
 import MapKit
 import RxMKMapView
 import Kingfisher
@@ -11,14 +12,24 @@ class BusinessMapViewController: UIViewController {
     var viewModel: BusinessViewModel? {
         didSet {
             bindViewModel()
-            // TODO: remove
-            centerMapOnLocation(location: viewModel!.location)
         }
     }
     private let disposeBag = DisposeBag()
+    private let locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        checkLocationAuthorizationStatus()
+        locationManager.startUpdatingLocation()
+    }
+
+    func checkLocationAuthorizationStatus() {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            mapView.showsUserLocation = true
+        } else {
+            locationManager.requestWhenInUseAuthorization()
+        }
     }
 
     func bindViewModel() {
@@ -48,6 +59,24 @@ class BusinessMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: [])
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
+
+        locationManager.rx.didUpdateLocations
+            .debug("MAP:: didUpdateLocations")
+            .subscribe(onNext: { _ in })
+            .disposed(by: disposeBag)
+
+        locationManager.rx.didChangeAuthorization
+            .debug("MAP:: didChangeAuthorization")
+            .subscribe(onNext: { event in print(event) })
+            .disposed(by: disposeBag)
+
+        locationManager.rx.location
+            .debug("MAP:: location")
+            .subscribe(onNext: { location in
+                guard let location = location else { return }
+                self.centerMapOnLocation(location: location)
+            })
+            .disposed(by: disposeBag)
     }
 
     // TODO: remove
@@ -63,6 +92,8 @@ class BusinessMapViewController: UIViewController {
 
 extension BusinessMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
+
         let reuseIdentifier = "annotationView"
         let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) ??
             MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
