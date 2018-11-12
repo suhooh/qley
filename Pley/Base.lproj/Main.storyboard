@@ -21,9 +21,24 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="ZnJ-7C-Zas">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </mapView>
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dGe-Ad-Suh" userLabel="User Tracking View">
+                                <rect key="frame" x="331" y="623" width="36" height="36"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="36" id="9qs-3v-fr1"/>
+                                    <constraint firstAttribute="width" constant="36" id="Y6i-tE-rhg"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="18"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dGe-Ad-Suh" secondAttribute="trailing" constant="8" id="6wP-Lv-TvN"/>
+                            <constraint firstAttribute="bottom" secondItem="dGe-Ad-Suh" secondAttribute="bottom" constant="8" id="B9B-pJ-c9d"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Cul-JR-gDN"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="duj-TI-o4Q"/>
                             <constraint firstItem="ZnJ-7C-Zas" firstAttribute="bottom" secondItem="8bC-Xf-vdC" secondAttribute="bottom" id="eHa-fy-IvA"/>
@@ -33,6 +48,8 @@
                     </view>
                     <connections>
                         <outlet property="mapView" destination="ZnJ-7C-Zas" id="GTI-it-Jur"/>
+                        <outlet property="userTrackButtonView" destination="dGe-Ad-Suh" id="gOB-pz-H16"/>
+                        <outlet property="userTrackButtonViewBottomConstraint" destination="B9B-pJ-c9d" id="zzU-wR-esX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
