@@ -38,7 +38,7 @@ class BusinessTableViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [unowned self] _ in
+//        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
 //            self.pulleyViewController?.bounceDrawer()
 //        }
     }
@@ -113,7 +113,7 @@ class BusinessTableViewController: UIViewController {
                 case .businessesSectionItem: return nil  // TODO: move to detail screen
                 }
             }
-            .do(onNext: { [unowned self] str in
+            .do(onNext: { str in
                 if str != nil { self.searchBar.text = str }
                 self.searchBarResignFirstResponder()
             })

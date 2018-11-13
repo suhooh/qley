@@ -9,8 +9,10 @@ import Pulley
 
 class BusinessMapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var searchThisAreaButton: UIButton!
     @IBOutlet weak var userTrackButtonView: UIView!
-    @IBOutlet weak var userTrackButtonViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var userControlViewBottomConstraint: NSLayoutConstraint!
+    private var mapChangedFromUserInteraction = false
 
     var viewModel: BusinessViewModel? {
         didSet {
@@ -41,11 +43,27 @@ class BusinessMapViewController: UIViewController {
             .setDelegate(self)
             .disposed(by: disposeBag)
 
-        mapView.rx.region
-            .map { [unowned self] region in
+        Observable
+            .combineLatest(mapView.rx.region.asObservable(),
+                           viewModel.input.searchText.asObservable())
+            .do(onNext: { _, term in
+                self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
+            })
+            .map { region, _ in
                 return (region, self.mapView.currentRadius)
             }
             .bind(to: viewModel.input.regionAndRadius)
+            .disposed(by: disposeBag)
+
+        mapView.rx.regionWillChangeAnimated
+            .subscribe(onNext: { _ in
+                self.mapChangedFromUserInteraction = self.mapViewRegionDidChangeFromUserInteraction()
+            })
+            .disposed(by: disposeBag)
+
+        searchThisAreaButton.rx.tap
+            .do(onNext: { _ in self.searchThisAreaButton.isHidden = true })
+            .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
 
         viewModel.output.annotations
@@ -57,14 +75,14 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
 
         locationManager.rx.didUpdateLocations
-            .subscribe(onNext: { [unowned self] _, locations in
+            .subscribe(onNext: { _, locations in
                 guard let location = locations.last else { return }
                 DispatchQueue.once { self.centerMapOnLocation(location: location) }
             })
             .disposed(by: disposeBag)
 
         locationManager.rx.didChangeAuthorization
-            .subscribe({ [unowned self] _ in
+            .subscribe({ _ in
                 self.trackUserLocation()
             })
             .disposed(by: disposeBag)
@@ -98,6 +116,16 @@ class BusinessMapViewController: UIViewController {
                                   edgePadding: UIEdgeInsets(top: 30, left: 30, bottom: 30 + offset, right: 30),
                                   animated: true)
     }
+
+    private func mapViewRegionDidChangeFromUserInteraction() -> Bool {
+        let view = mapView.subviews[0]
+        if let gestureRecognizers = view.gestureRecognizers {
+            for recognizer in gestureRecognizers where ( recognizer.state == .began || recognizer.state == .ended ) {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 // MARK: - MKMapViewDelegate
@@ -120,18 +148,24 @@ extension BusinessMapViewController: MKMapViewDelegate {
 // MARK: - PulleyPrimaryContentControllerDelegate
 
 extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
+    func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
+        if drawer.drawerPosition == .open {
+            mapChangedFromUserInteraction = false
+        }
+    }
+
     func drawerChangedDistanceFromBottom(drawer: PulleyViewController, distance: CGFloat, bottomSafeArea: CGFloat) {
         let trackButtonBottomDistance: CGFloat = 8.0
         let partialRevealedDrawerHeight: CGFloat = 264.0
 
         guard drawer.currentDisplayMode == .drawer else {
-            userTrackButtonViewBottomConstraint.constant = trackButtonBottomDistance
+            userControlViewBottomConstraint.constant = trackButtonBottomDistance
             return
         }
 
         let properBottomConstraint = trackButtonBottomDistance +
             (distance <= partialRevealedDrawerHeight + bottomSafeArea ? distance : partialRevealedDrawerHeight)
-        userTrackButtonViewBottomConstraint.constant = properBottomConstraint
+        userControlViewBottomConstraint.constant = properBottomConstraint
         if mapView.annotations.count > 1 {
             showAnnotationsInVisibleRegion(offset: properBottomConstraint)
         }
