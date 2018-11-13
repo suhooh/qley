@@ -29,7 +29,7 @@ struct Business {
         self.rating = json["rating"].double
         self.price = json["price"].string
         self.categories = json["categories"].array?.compactMap(Category.init)
-        
+
         // Optionals
         self.alias =  json["alias"].string
         self.isClosed = json["is_closed"].bool

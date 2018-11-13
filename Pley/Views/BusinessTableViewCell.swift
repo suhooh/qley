@@ -3,14 +3,14 @@ import Cosmos
 
 class BusinessTableViewCell: UITableViewCell {
     static let reuseIdendifier = String(describing: BusinessTableViewCell.self)
-    
+
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var ratingView: CosmosView!
     @IBOutlet weak var reviewLabel: UILabel!
     @IBOutlet weak var priceAndCagegoriesLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }

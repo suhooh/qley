@@ -1,0 +1,13 @@
+function_body_length:
+  - 60 # warning
+  - 100 # error
+identifier_name:
+  max_length:
+    warning: 45
+  min_length:
+    warning: 2
+force_cast: warning
+excluded:
+  - Pods
+reporter:
+  - xcode
