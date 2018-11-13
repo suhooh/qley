@@ -123,7 +123,7 @@ class BusinessTableViewController: UIViewController {
             .map { data -> [MultipleSectionModel] in
                 guard let item = data.items.first else { return [] }
                 switch item {
-                // returns [AutocompleteSection, BusinessesSection] all the time
+                // returns [AutocompleteSection, BusinessesSection] format
                 case .autocompleteSectionItem: return [data, .businessesSection(items: [])]
                 case .businessesSectionItem: return [.autocompleteSection(items: []), data]
                 }
@@ -159,11 +159,34 @@ class BusinessTableViewController: UIViewController {
             .map { _ in }
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
+
+        viewModel.output.businesses
+            .subscribe(onNext: { data in self.displayNoItems(data.first == nil) })
+            .disposed(by: disposeBag)
+
+        viewModel.output.autocompletes
+            .subscribe(onNext: { _ in self.displayNoItems(false) })
+            .disposed(by: disposeBag)
     }
 
     func searchBarResignFirstResponder() {
         self.searchBar.resignFirstResponder()
         (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
+    }
+
+    func displayNoItems(_ isOn: Bool) {
+        if isOn {
+            let noItem: UILabel = UILabel()
+            noItem.font = UIFont.boldSystemFont(ofSize: 16)
+            noItem.textAlignment = .center
+            noItem.textColor = .gray
+            noItem.text = "No restaurants available in this area."
+            self.tableView.backgroundView = noItem
+            self.tableView.separatorStyle = .none
+        } else {
+            self.tableView.backgroundView = nil
+            self.tableView.separatorStyle = .singleLine
+        }
     }
 }
 

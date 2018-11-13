@@ -1,3 +1,6 @@
+function_body_length:
+  - 60 # warning
+  - 100 # error
 identifier_name:
   max_length:
     warning: 45
