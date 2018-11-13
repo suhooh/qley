@@ -25,6 +25,8 @@ class BusinessMapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        mapView.register(NumberAnnotationView.self,
+                         forAnnotationViewWithReuseIdentifier: NumberAnnotationView.reuseIdendifier)
         checkLocationAuthorizationStatus()
     }
 
@@ -134,13 +136,9 @@ extension BusinessMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
-        let reuseIdentifier = "annotationView"
-        let view = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) ??
-            MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-        // prevent annotation clustering
-        view.displayPriority = .required
+        let view = mapView.dequeueReusableAnnotationView(withIdentifier: NumberAnnotationView.reuseIdendifier) ??
+            MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: NumberAnnotationView.reuseIdendifier)
         view.annotation = annotation
-        //view.canShowCallout = true
         return view
     }
 }

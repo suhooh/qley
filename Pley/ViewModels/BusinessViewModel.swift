@@ -40,9 +40,12 @@ final class BusinessViewModel: ViewModelType {
 
         let businesses = businessSearchResponse.map { $0.businesses }
         let annotations = businesses.map { businesses -> [BusinessAnnotation] in
-            businesses.compactMap { business -> BusinessAnnotation? in
+            businesses.enumerated().compactMap { idx, business -> BusinessAnnotation? in
                 guard let coordinate = business.coordinates?.clLocation2D else { return nil }
-                return BusinessAnnotation(name: business.name, coordinate: coordinate)
+                return BusinessAnnotation(number: idx + 1,
+                                          name: business.name,
+                                          category: business.categories?.first?.title ?? "",
+                                          coordinate: coordinate)
             }
         }
 
