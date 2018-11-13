@@ -16,6 +16,7 @@ class BusinessTableViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
     var viewModel: BusinessViewModel? {
         didSet {
@@ -24,6 +25,23 @@ class BusinessTableViewController: UIViewController {
     }
 
     private let disposeBag = DisposeBag()
+
+    var selectedIndex: Int = 0 {
+        didSet {
+            if pulleyViewController?.drawerPosition != .partiallyRevealed {
+                pulleyViewController?.setDrawerPosition(position: .partiallyRevealed, animated: true)
+            }
+            let indexPath = IndexPath(row: selectedIndex, section: 1)
+            let cell = tableView.cellForRow(at: indexPath)
+
+            tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+
+            cell?.setSelected(true, animated: false)
+            DispatchQueue.main.asyncAfter(
+                deadline: DispatchTime.now() + Double(Int64(0.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC),
+                execute: { cell?.setSelected(false, animated: true) })
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,20 +124,47 @@ class BusinessTableViewController: UIViewController {
             .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
             .disposed(by: disposeBag)
 
-        tableView.rx.modelSelected(SectionItem.self)
-            .map { model -> String? in
+        Observable
+            .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(SectionItem.self))
+            .map { indexPath, model -> String? in
+                self.tableView.deselectRow(at: indexPath, animated: true)
                 switch model {
                 case let .autocompleteSectionItem(text): return text
-                case .businessesSectionItem: return nil  // TODO: move to detail screen
+                // TODO: prevent this from searching again
+                case .businessesSectionItem:
+                    if let pulley = self.pulleyViewController as? BusinessViewController {
+                        pulley.shareUserTableSelection(index: indexPath.row)
+                    }
+                    return nil
                 }
             }
             .do(onNext: { str in
-                if str != nil { self.searchBar.text = str }
+                if str != nil { self.searchBar.text = str
                 self.searchBarResignFirstResponder()
+                }
             })
             .map { _ in }
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
+
+//        tableView.rx.modelSelected(SectionItem.self)
+//            .map { model -> String? in
+//                switch model {
+//                case let .autocompleteSectionItem(text): return text
+//                case let .businessesSectionItem(business):
+//                    if let pulley = self.pulleyViewController as? BusinessViewController,
+//                        pulley.shareUserTableSelection(index: business. - 1)
+//                    }
+//                    return nil
+//                }
+//            }
+//            .do(onNext: { str in
+//                if str != nil { self.searchBar.text = str }
+//                self.searchBarResignFirstResponder()
+//            })
+//            .map { _ in }
+//            .bind(to: viewModel.input.doSearch)
+//            .disposed(by: disposeBag)
     }
 
     func searchBarResignFirstResponder() {
@@ -153,6 +198,10 @@ extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
         headerSectionHeightConstraint.constant = Constants.searchBarHeight +
             (drawer.drawerPosition == .collapsed ? bottomSafeArea : 0.0)
         // tableView.isScrollEnabled = drawer.drawerPosition == .open || drawer.currentDisplayMode == .panel
+        tableViewBottomConstraint.constant =
+            drawer.drawerPosition == .partiallyRevealed
+            ? view.frame.height - Constants.partialRevealedDrawerHeight - bottomSafeArea
+            : 20
         if drawer.drawerPosition != .open { searchBarResignFirstResponder() }
     }
 }

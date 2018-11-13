@@ -39,4 +39,14 @@ class BusinessViewController: PulleyViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
+
+    func shareUserMapSelection(index: Int) {
+        guard let tableViewController = drawerContentViewController as? BusinessTableViewController else { return }
+        tableViewController.selectedIndex = index
+    }
+
+    func shareUserTableSelection(index: Int) {
+        guard let mapViewController = primaryContentViewController as? BusinessMapViewController else { return }
+        mapViewController.selectedIndex = index
+    }
 }

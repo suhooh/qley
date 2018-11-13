@@ -25,13 +25,14 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="36"/>
                                 <subviews>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ich-Jf-rgU">
-                                        <rect key="frame" x="97.5" y="3" width="180" height="30"/>
+                                        <rect key="frame" x="97" y="3" width="181" height="30"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="5gd-07-ytd"/>
-                                            <constraint firstAttribute="width" constant="180" id="bi9-JY-1ZW"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="bi9-JY-1ZW"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="9" maxY="0.0"/>
                                         <state key="normal" title="Redo Search In This Area"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -356,6 +357,7 @@
                         <outlet property="headerSectionHeightConstraint" destination="5Jl-DZ-6TS" id="Xg1-de-JBC"/>
                         <outlet property="searchBar" destination="EmS-Yc-d9h" id="2nA-jq-sHb"/>
                         <outlet property="tableView" destination="uck-sy-EnB" id="Pcy-7J-mwB"/>
+                        <outlet property="tableViewBottomConstraint" destination="AAq-Ot-PCd" id="osw-3B-TvU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RUc-mI-z20" userLabel="First Responder" sceneMemberID="firstResponder"/>

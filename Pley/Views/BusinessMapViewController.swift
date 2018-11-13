@@ -23,6 +23,17 @@ class BusinessMapViewController: UIViewController {
     private let locationManager = CLLocationManager()
     private var trackButton: MKUserTrackingButton?
 
+    var selectedIndex: Int = 0 {
+        didSet {
+            for annotation in mapView.annotations {
+                if let ann = annotation as? BusinessAnnotation, ann.number == selectedIndex + 1 {
+                    mapView.selectAnnotation(ann, animated: true)
+                    return
+                }
+            }
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.register(NumberAnnotationView.self,
@@ -51,15 +62,22 @@ class BusinessMapViewController: UIViewController {
             .do(onNext: { _, term in
                 self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
             })
-            .map { region, _ in
-                return (region, self.mapView.currentRadius)
-            }
+            .map { region, _ in return (region, self.mapView.currentRadius) }
             .bind(to: viewModel.input.regionAndRadius)
             .disposed(by: disposeBag)
 
         mapView.rx.regionWillChangeAnimated
             .subscribe(onNext: { _ in
                 self.mapChangedFromUserInteraction = self.mapViewRegionDidChangeFromUserInteraction()
+            })
+            .disposed(by: disposeBag)
+
+        mapView.rx.didSelectAnnotationView
+            .subscribe(onNext: { annotationView in
+                if let pulley = self.pulleyViewController as? BusinessViewController,
+                    let annotation = annotationView.annotation as? BusinessAnnotation {
+                    pulley.shareUserMapSelection(index: annotation.number - 1)
+                }
             })
             .disposed(by: disposeBag)
 
@@ -84,9 +102,7 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
 
         locationManager.rx.didChangeAuthorization
-            .subscribe({ _ in
-                self.trackUserLocation()
-            })
+            .subscribe({ _ in self.trackUserLocation() })
             .disposed(by: disposeBag)
     }
 
