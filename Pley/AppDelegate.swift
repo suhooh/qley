@@ -1,5 +1,6 @@
 import UIKit
 import Pulley
+import AlamofireNetworkActivityIndicator
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -8,6 +9,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+
+        NetworkActivityIndicatorManager.shared.isEnabled = true
+
         window = UIWindow(frame: UIScreen.main.bounds)
         let mainContentVC = UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(withIdentifier: "BusinessMapViewController")
@@ -17,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                                                             drawerViewController: drawerContentVC)
         window?.rootViewController = businessViewController
         window?.makeKeyAndVisible()
+
         return true
     }
 
