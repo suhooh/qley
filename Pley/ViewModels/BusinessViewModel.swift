@@ -30,7 +30,7 @@ final class BusinessViewModel: ViewModelType {
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
             .flatMapLatest { $0.0.isEmpty
-                ? Observable<BusinessSearchResponse>.empty()
+                ? Observable.just(BusinessSearchResponse())
                 : yelpApiService.search($0.0,
                                         latitude: $0.1.0.center.latitude,
                                         longitude: $0.1.0.center.longitude,
@@ -53,7 +53,7 @@ final class BusinessViewModel: ViewModelType {
             .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
             .distinctUntilChanged { $0.0 == $1.0 }
             .flatMapLatest { $0.0.isEmpty
-                ? Observable<AutocompleteResponse>.empty()
+                ? Observable.just(AutocompleteResponse())
                 : yelpApiService.autocomplete($0.0,
                                               latitude: $0.1.0.center.latitude,
                                               longitude: $0.1.0.center.longitude)

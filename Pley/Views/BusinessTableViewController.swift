@@ -23,8 +23,8 @@ class BusinessTableViewController: UIViewController {
             bindViewModel()
         }
     }
-
     private let disposeBag = DisposeBag()
+    private let searchText = Variable<String>("")
 
     var selectedIndex: Int = 0 {
         didSet {
@@ -71,7 +71,15 @@ class BusinessTableViewController: UIViewController {
     func bindSearchBar() {
         guard let viewModel = viewModel else { return }
 
-        searchBar.rx.text.orEmpty
+        searchBar.rx.text.orEmpty.asDriver()
+            .drive(searchText)
+            .disposed(by: disposeBag)
+
+        searchText.asObservable()
+            .subscribe(onNext: { self.searchBar.text = $0 })
+            .disposed(by: disposeBag)
+
+        searchText.asObservable()
             .bind(to: viewModel.input.searchText)
             .disposed(by: disposeBag)
 
@@ -84,7 +92,6 @@ class BusinessTableViewController: UIViewController {
 
         searchBar.rx.cancelButtonClicked
             .subscribe { _ in
-                self.searchBar.text = ""
                 self.searchBarResignFirstResponder()
                 self.searchBar.setShowsCancelButton(false, animated: true)
             }
@@ -146,7 +153,7 @@ class BusinessTableViewController: UIViewController {
             }
             .filter { $0 != nil }
             .do(onNext: { str in
-                self.searchBar.text = str
+                self.searchText.value = str ?? ""
                 self.searchBarResignFirstResponder()
             })
             .map { _ in }

@@ -126,8 +126,11 @@ class BusinessMapViewController: UIViewController {
     }
 
     func showAnnotationsInVisibleRegion(offset: CGFloat) {
+        let ans = mapView.annotations
+        if ans.isEmpty || (ans.count == 1 && ans[0].isEqual(mapView.userLocation)) { return }
+
         var totalMapRect = MKMapRect.null
-        for annotation in mapView.annotations {
+        for annotation in ans {
             if annotation.isEqual(mapView.userLocation) { continue }
             let annotationPoint = MKMapPoint(annotation.coordinate)
             let mapRect = MKMapRect.init(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
