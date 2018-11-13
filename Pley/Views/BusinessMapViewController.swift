@@ -23,6 +23,8 @@ class BusinessMapViewController: UIViewController {
     private let locationManager = CLLocationManager()
     private var trackButton: MKUserTrackingButton?
 
+    private var properBottomConstraint: CGFloat = 0.0
+
     var selectedIndex: Int = 0 {
         didSet {
             for annotation in mapView.annotations {
@@ -57,8 +59,7 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
 
         Observable
-            .combineLatest(mapView.rx.region.asObservable(),
-                           viewModel.input.searchText.asObservable())
+            .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchText.asObservable())
             .do(onNext: { _, term in
                 self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
             })
@@ -90,6 +91,7 @@ class BusinessMapViewController: UIViewController {
             .asDriver(onErrorJustReturn: [])
             .do(onNext: { annotations in
                 self.mapView.showAnnotations(annotations, animated: true)
+                self.showAnnotationsInVisibleRegion(offset: self.properBottomConstraint)
             })
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
@@ -126,6 +128,7 @@ class BusinessMapViewController: UIViewController {
     func showAnnotationsInVisibleRegion(offset: CGFloat) {
         var totalMapRect = MKMapRect.null
         for annotation in mapView.annotations {
+            if annotation.isEqual(mapView.userLocation) { continue }
             let annotationPoint = MKMapPoint(annotation.coordinate)
             let mapRect = MKMapRect.init(x: annotationPoint.x, y: annotationPoint.y, width: 0.1, height: 0.1)
             totalMapRect = totalMapRect.union(mapRect)
@@ -177,7 +180,7 @@ extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
             return
         }
 
-        let properBottomConstraint = trackButtonBottomDistance +
+        properBottomConstraint = trackButtonBottomDistance +
             (distance <= partialRevealedDrawerHeight + bottomSafeArea ? distance : partialRevealedDrawerHeight)
         userControlViewBottomConstraint.constant = properBottomConstraint
         if mapView.annotations.count > 1 {
