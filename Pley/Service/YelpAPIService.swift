@@ -22,6 +22,8 @@ class YelpAPIService {
         case parseFailed
     }
 
+    let networking = Variable<Bool>(false)
+
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
         let searchTerm = term.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -35,12 +37,14 @@ class YelpAPIService {
             "radius": String(min(radius, 40000))
         ]
 
+        networking.value = true
         return RxAlamofire.requestJSON(.get, Resource.businessSearch.path,
                                        parameters: params,
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
             .flatMap { (_, json) -> Observable<BusinessSearchResponse> in
+                self.networking.value = false
                 guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else {
                     return Observable.error(APIError.parseFailed)
                 }

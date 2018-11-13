@@ -15,6 +15,7 @@ final class BusinessViewModel: ViewModelType {
         let businesses: Observable<[Business]>
         let annotations: Observable<[BusinessAnnotation]>
         let autocompletes: Observable<[String]>
+        let networking: Variable<Bool>
     }
 
     let input: Input
@@ -26,6 +27,7 @@ final class BusinessViewModel: ViewModelType {
 
     init() {
         let yelpApiService = YelpAPIService()
+        let networking = yelpApiService.networking
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
@@ -66,7 +68,8 @@ final class BusinessViewModel: ViewModelType {
 
         self.output = Output(businesses: businesses,
                              annotations: annotations,
-                             autocompletes: autocompletes)
+                             autocompletes: autocompletes,
+                             networking: networking)
         self.input = Input(searchText: searchText,
                            doSearch: doSearchSubject.asObserver(),
                            regionAndRadius: regionAndRadius)

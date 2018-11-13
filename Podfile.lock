@@ -4,6 +4,7 @@ PODS:
     - Alamofire (~> 4.7)
   - Cosmos (17.0.0)
   - Differentiator (3.1.0)
+  - DSGradientProgressView (1.0.0)
   - Kingfisher (4.10.1)
   - Pulley (2.6.2)
   - RxAlamofire (4.3.0):
@@ -35,6 +36,7 @@ DEPENDENCIES:
   - Alamofire (~> 4.7)
   - AlamofireNetworkActivityIndicator (~> 2.3)
   - Cosmos (~> 17.0)
+  - DSGradientProgressView (~> 1.0)
   - Kingfisher (~> 4.10)
   - Pulley (~> 2.6)
   - RxAlamofire (~> 4.3)
@@ -43,7 +45,7 @@ DEPENDENCIES:
   - RxDataSources (~> 3.1)
   - RxMKMapView (~> 4.3)
   - RxSwift (~> 4.3)
-  - StatusBarOverlay
+  - StatusBarOverlay (~> 1.9)
   - SwiftLint (~> 0.27)
   - SwiftyJSON (~> 4.2)
 
@@ -53,6 +55,7 @@ SPEC REPOS:
     - AlamofireNetworkActivityIndicator
     - Cosmos
     - Differentiator
+    - DSGradientProgressView
     - Kingfisher
     - Pulley
     - RxAlamofire
@@ -70,6 +73,7 @@ SPEC CHECKSUMS:
   AlamofireNetworkActivityIndicator: 18346ff6d770d9513d0ac6f2d99706f40f93dbaa
   Cosmos: 309e489f21ffc91a1eeecfebef7f817cd2fcfba6
   Differentiator: be49ca3408f0ecfc761e4c7763d20c62be01b9ad
+  DSGradientProgressView: b591b4dfc6a7491fbd1f8dedee7a6ce02b23640f
   Kingfisher: c148cd7b47ebde9989f6bc7c27dcaa79d81279a0
   Pulley: 2679a2b5a9714c5eb760b1fbb535d15c60e50fb4
   RxAlamofire: 09624d0f2d48ed8b686e4eb4cf68e28cbd2df556
@@ -82,6 +86,6 @@ SPEC CHECKSUMS:
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
 
-PODFILE CHECKSUM: 1fb6fc9977885cf93d2708f3551e6da9ec7c3b1e
+PODFILE CHECKSUM: e52d4e9b0949295a571eb3bbec75db9ffe6ff344
 
 COCOAPODS: 1.5.3
