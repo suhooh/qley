@@ -126,45 +126,32 @@ class BusinessTableViewController: UIViewController {
 
         Observable
             .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(SectionItem.self))
-            .map { indexPath, model -> String? in
+            // consume business selection
+            .do(onNext: { indexPath, model in
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 switch model {
-                case let .autocompleteSectionItem(text): return text
-                // TODO: prevent this from searching again
                 case .businessesSectionItem:
                     if let pulley = self.pulleyViewController as? BusinessViewController {
                         pulley.shareUserTableSelection(index: indexPath.row)
                     }
-                    return nil
+                default: break
+                }
+            })
+            // consume autocomplete selection
+            .map { _, model -> String? in
+                switch model {
+                case let .autocompleteSectionItem(text): return text
+                case .businessesSectionItem: return nil
                 }
             }
+            .filter { $0 != nil }
             .do(onNext: { str in
-                if str != nil { self.searchBar.text = str
+                self.searchBar.text = str
                 self.searchBarResignFirstResponder()
-                }
             })
             .map { _ in }
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
-
-//        tableView.rx.modelSelected(SectionItem.self)
-//            .map { model -> String? in
-//                switch model {
-//                case let .autocompleteSectionItem(text): return text
-//                case let .businessesSectionItem(business):
-//                    if let pulley = self.pulleyViewController as? BusinessViewController,
-//                        pulley.shareUserTableSelection(index: business. - 1)
-//                    }
-//                    return nil
-//                }
-//            }
-//            .do(onNext: { str in
-//                if str != nil { self.searchBar.text = str }
-//                self.searchBarResignFirstResponder()
-//            })
-//            .map { _ in }
-//            .bind(to: viewModel.input.doSearch)
-//            .disposed(by: disposeBag)
     }
 
     func searchBarResignFirstResponder() {
