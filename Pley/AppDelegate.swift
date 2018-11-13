@@ -1,6 +1,7 @@
 import UIKit
 import Pulley
 import AlamofireNetworkActivityIndicator
+import StatusBarOverlay
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -10,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        StatusBarOverlay.host = YelpAPIService.Constants.host
         NetworkActivityIndicatorManager.shared.isEnabled = true
 
         window = UIWindow(frame: UIScreen.main.bounds)

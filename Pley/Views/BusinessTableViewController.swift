@@ -6,11 +6,11 @@ import Pulley
 
 class BusinessTableViewController: UIViewController {
 
-    private struct Constants {
-        static let searchBarHeight: CGFloat = 63.0
+    struct Constants {
         static let partialRevealedDrawerHeight: CGFloat = 264.0
-        static let autocompletedRowHeight: CGFloat = 60
-        static let businessRowHeight: CGFloat = 110
+        fileprivate static let searchBarHeight: CGFloat = 63.0
+        fileprivate static let autocompletedRowHeight: CGFloat = 60
+        fileprivate static let businessRowHeight: CGFloat = 110
     }
 
     @IBOutlet weak var searchBar: UISearchBar!

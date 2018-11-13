@@ -15,6 +15,7 @@ target 'Pley' do
   pod 'Cosmos',        '~> 17.0'
   pod 'SwiftLint',     '~> 0.27'
   pod 'AlamofireNetworkActivityIndicator', '~> 2.3'
+  pod 'StatusBarOverlay'
 
   target 'PleyTests' do
     inherit! :search_paths

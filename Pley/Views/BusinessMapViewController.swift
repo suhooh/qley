@@ -176,7 +176,7 @@ extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
 
     func drawerChangedDistanceFromBottom(drawer: PulleyViewController, distance: CGFloat, bottomSafeArea: CGFloat) {
         let trackButtonBottomDistance: CGFloat = 8.0
-        let partialRevealedDrawerHeight: CGFloat = 264.0
+        let partialRevealedDrawerHeight: CGFloat = BusinessTableViewController.Constants.partialRevealedDrawerHeight
 
         guard drawer.currentDisplayMode == .drawer else {
             userControlViewBottomConstraint.constant = trackButtonBottomDistance

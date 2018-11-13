@@ -5,9 +5,10 @@ import Alamofire
 import SwiftyJSON
 
 class YelpAPIService {
-    private struct Constants {
-        static let baseURL = "https://api.yelp.com/v3/"
-        static let APIKey = "Bearer " // + "YOUR API KEY HERE"
+    struct Constants {
+        static let host = "api.yelp.com"
+        fileprivate static let baseURL = "https://" + host + "/v3/"
+        fileprivate static let APIKey = "Bearer " // + "YOUR API KEY HERE"
     }
 
     enum Resource: String {
