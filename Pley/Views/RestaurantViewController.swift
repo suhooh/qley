@@ -3,7 +3,7 @@ import Pulley
 import RxSwift
 import DSGradientProgressView
 
-class RestaurantViewController: PulleyViewController {
+class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtocol {
 
     private let viewModel = RestaurantViewModel()
     private let disposeBag = DisposeBag()
@@ -26,6 +26,8 @@ class RestaurantViewController: PulleyViewController {
         mapViewController.viewModel = viewModel
         tableViewController.viewModel = viewModel
 
+        bind(viewModel: viewModel)
+
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillDisappear),
                                                name: UIResponder.keyboardWillHideNotification,
@@ -34,10 +36,9 @@ class RestaurantViewController: PulleyViewController {
                                                selector: #selector(keyboardWillAppear),
                                                name: UIResponder.keyboardWillShowNotification,
                                                object: nil)
-        bindViewModel()
     }
 
-    func bindViewModel() {
+    func bind(viewModel: RestaurantViewModel) {
         viewModel.output.networking.asObservable()
             .subscribe(onNext: { isNetworking in
                 isNetworking ? self.progressView?.wait() : self.progressView?.signal()

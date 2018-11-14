@@ -7,19 +7,15 @@ import RxMKMapView
 import Kingfisher
 import Pulley
 
-class RestaurantMapViewController: UIViewController {
+class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
+                                   MKMapViewDelegate, PulleyPrimaryContentControllerDelegate {
+
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchThisAreaButton: UIButton!
     @IBOutlet weak var userTrackButtonView: UIView!
     @IBOutlet weak var userControlViewBottomConstraint: NSLayoutConstraint!
     private var mapChangedFromUserInteraction = false
 
-    var viewModel: RestaurantViewModel? {
-        didSet {
-            bindViewModel()
-        }
-    }
-    private let disposeBag = DisposeBag()
     private let locationManager = CLLocationManager()
     private var trackButton: MKUserTrackingButton?
 
@@ -54,8 +50,8 @@ class RestaurantMapViewController: UIViewController {
         }
     }
 
-    func bindViewModel() {
-        guard let viewModel = viewModel else { return }
+    override func bind(viewModel: RestaurantViewModel) {
+        super.bind(viewModel: viewModel)
 
         mapView.rx
             .setDelegate(self)
@@ -153,11 +149,9 @@ class RestaurantMapViewController: UIViewController {
         }
         return false
     }
-}
 
-// MARK: - MKMapViewDelegate
+    // MARK: - MKMapViewDelegate
 
-extension RestaurantMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
@@ -166,11 +160,9 @@ extension RestaurantMapViewController: MKMapViewDelegate {
         view.annotation = annotation
         return view
     }
-}
 
-// MARK: - PulleyPrimaryContentControllerDelegate
+    // MARK: - PulleyPrimaryContentControllerDelegate
 
-extension RestaurantMapViewController: PulleyPrimaryContentControllerDelegate {
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         if drawer.drawerPosition == .open {
             mapChangedFromUserInteraction = false

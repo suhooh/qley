@@ -4,7 +4,8 @@ import RxCocoa
 import RxDataSources
 import Pulley
 
-class RestaurantTableViewController: UIViewController {
+class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
+                                     UITableViewDelegate, PulleyDrawerViewControllerDelegate {
 
     struct Constants {
         static let partialRevealedDrawerHeight: CGFloat = 264.0
@@ -18,12 +19,6 @@ class RestaurantTableViewController: UIViewController {
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
-    var viewModel: RestaurantViewModel? {
-        didSet {
-            bindViewModel()
-        }
-    }
-    private let disposeBag = DisposeBag()
     private let searchText = Variable<String>("")
 
     var selectedIndex: Int = 0 {
@@ -61,16 +56,14 @@ class RestaurantTableViewController: UIViewController {
 //        }
     }
 
-    func bindViewModel() {
-        guard viewModel != nil else { return }
+    override func bind(viewModel: RestaurantViewModel) {
+        super.bind(viewModel: viewModel)
 
-        bindSearchBar()
-        bindTableView()
+        bindSearchBar(viewModel)
+        bindTableView(viewModel)
     }
 
-    func bindSearchBar() {
-        guard let viewModel = viewModel else { return }
-
+    func bindSearchBar(_ viewModel: RestaurantViewModel) {
         searchBar.rx.text.orEmpty.asDriver()
             .drive(searchText)
             .disposed(by: disposeBag)
@@ -104,9 +97,7 @@ class RestaurantTableViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    func bindTableView() {
-        guard let viewModel = viewModel else { return }
-
+    func bindTableView(_ viewModel: RestaurantViewModel) {
         /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
         Observable.of(
             viewModel.output.autocompletes
@@ -188,18 +179,13 @@ class RestaurantTableViewController: UIViewController {
             self.tableView.separatorStyle = .singleLine
         }
     }
-}
 
-// MARK: - UITableViewDelegate
-extension RestaurantTableViewController: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.section == 0 ? Constants.autocompletedRowHeight : Constants.restaurantRowHeight
     }
-}
 
-// MARK: - PulleyDrawerViewControllerDelegate
-
-extension RestaurantTableViewController: PulleyDrawerViewControllerDelegate {
+    // MARK: - PulleyDrawerViewControllerDelegate
     // For devices with a bottom safe area ( e.g. iPhone X )
 
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
@@ -248,7 +234,6 @@ extension RestaurantTableViewController {
                 }
         })
     }
-
 }
 
 // MARK: - MultipleSectionModel
