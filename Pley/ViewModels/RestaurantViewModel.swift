@@ -16,6 +16,7 @@ final class RestaurantViewModel: ViewModelType {
         let annotations: Observable<[RestaurantAnnotation]>
         let autocompletes: Observable<[String]>
         let networking: Variable<Bool>
+        let searchTextChanged: Observable<Bool>
     }
 
     let input: Input
@@ -76,10 +77,15 @@ final class RestaurantViewModel: ViewModelType {
             return (response.terms?.compactMap { $0.text } ?? []) + (response.categories?.compactMap { $0.title } ?? [])
         }
 
+        let searchTextChanged = searchText.asObservable()
+            .distinctUntilChanged()
+            .map { _ in true }
+
         self.output = Output(restaurants: restaurants,
                              annotations: annotations,
                              autocompletes: autocompletes,
-                             networking: networking)
+                             networking: networking,
+                             searchTextChanged: searchTextChanged)
         self.input = Input(searchText: searchText,
                            doSearch: doSearchSubject.asObserver(),
                            regionAndRadius: regionAndRadius)

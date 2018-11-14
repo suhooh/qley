@@ -95,6 +95,10 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
 
+        viewModel.output.searchTextChanged
+            .subscribe(onNext: { _ in self.mapView.removeAnnotations(self.mapView.annotations) })
+            .disposed(by: disposeBag)
+
         locationManager.rx.didUpdateLocations
             .subscribe(onNext: { _, locations in
                 guard let location = locations.last else { return }
