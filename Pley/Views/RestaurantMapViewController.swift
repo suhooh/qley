@@ -30,6 +30,9 @@ class RestaurantMapViewController: UIViewController {
             for annotation in mapView.annotations {
                 if let ann = annotation as? RestaurantAnnotation, ann.number == selectedIndex + 1 {
                     mapView.selectAnnotation(ann, animated: true)
+                    if !mapView.annotations(in: mapView.visibleMapRect).contains(ann) {
+                        mapView.setCenter(ann.coordinate, animated: true)
+                    }
                     return
                 }
             }

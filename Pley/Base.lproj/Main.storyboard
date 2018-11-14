@@ -191,10 +191,10 @@
                                                                             <integer key="value" value="7"/>
                                                                         </userDefinedRuntimeAttribute>
                                                                         <userDefinedRuntimeAttribute type="color" keyPath="emptyColor">
-                                                                            <color key="value" red="0.93250930310000002" green="0.3175867288" blue="0.27436712000000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                            <color key="value" red="0.75865292549133301" green="0.21698328852653503" blue="0.18035677075386047" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                         </userDefinedRuntimeAttribute>
                                                                         <userDefinedRuntimeAttribute type="color" keyPath="emptyBorderColor">
-                                                                            <color key="value" red="0.93250930310000002" green="0.3175867288" blue="0.27436712000000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                                            <color key="value" red="0.75865292549133301" green="0.21698328852653503" blue="0.18035677075386047" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                                         </userDefinedRuntimeAttribute>
                                                                         <userDefinedRuntimeAttribute type="color" keyPath="filledBorderColor">
                                                                             <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -209,7 +209,7 @@
                                                                     </userDefinedRuntimeAttributes>
                                                                 </view>
                                                             </subviews>
-                                                            <color key="backgroundColor" red="0.93250930310000002" green="0.3175867288" blue="0.27436712000000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                            <color key="backgroundColor" red="0.76256740093231201" green="0.21693757176399231" blue="0.18427935242652893" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="20" id="RGM-Em-jGw"/>
                                                                 <constraint firstItem="Dq8-dG-M4w" firstAttribute="centerX" secondItem="on2-wN-zIZ" secondAttribute="centerX" id="VOh-Yn-Fm7"/>
