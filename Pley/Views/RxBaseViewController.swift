@@ -18,7 +18,7 @@ class RxBaseViewController<ViewModelType>: UIViewController, RxBaseViewControlle
 
     // MARK: - RxBaseViewControllerProtocol
     func bind(viewModel: ViewModelType) {
-        // some common routines
+        // common routines
     }
 }
 

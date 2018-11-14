@@ -100,7 +100,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     }
 
     private func bindTableView(_ viewModel: RestaurantViewModel) {
-        /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
+        // RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
         Observable.of(
             viewModel.output.autocompletes
                 .map { MultipleSectionModel.autocompleteSection(items: $0.map { str in
