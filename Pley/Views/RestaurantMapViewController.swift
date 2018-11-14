@@ -107,7 +107,11 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         locationManager.rx.didChangeAuthorization
-            .subscribe({ _ in self.trackUserLocation() })
+            .subscribe({ _ in
+                if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+                    self.trackUserLocation()
+                }
+            })
             .disposed(by: disposeBag)
     }
 
