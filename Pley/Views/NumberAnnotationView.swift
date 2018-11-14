@@ -5,10 +5,10 @@ class NumberAnnotationView: MKMarkerAnnotationView {
 
     override var annotation: MKAnnotation? {
         willSet {
-            guard let business = newValue as? BusinessAnnotation else { return }
+            guard let annotation = newValue as? RestaurantAnnotation else { return }
 
             displayPriority = .required // prevent annotation clustering
-            glyphText = String(business.number)
+            glyphText = String(annotation.number)
             titleVisibility = .adaptive
             subtitleVisibility = .adaptive
         }

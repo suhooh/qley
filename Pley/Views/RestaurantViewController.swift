@@ -3,9 +3,9 @@ import Pulley
 import RxSwift
 import DSGradientProgressView
 
-class BusinessViewController: PulleyViewController {
+class RestaurantViewController: PulleyViewController {
 
-    private let viewModel = BusinessViewModel()
+    private let viewModel = RestaurantViewModel()
     private let disposeBag = DisposeBag()
     private var progressView: DSGradientProgressView?
 
@@ -20,8 +20,8 @@ class BusinessViewController: PulleyViewController {
         progressView?.isHidden = true
         view.addSubview(progressView!)
 
-        guard let mapViewController = primaryContentViewController as? BusinessMapViewController,
-            let tableViewController = drawerContentViewController as? BusinessTableViewController
+        guard let mapViewController = primaryContentViewController as? RestaurantMapViewController,
+            let tableViewController = drawerContentViewController as? RestaurantTableViewController
             else { return }
         mapViewController.viewModel = viewModel
         tableViewController.viewModel = viewModel
@@ -59,12 +59,12 @@ class BusinessViewController: PulleyViewController {
     }
 
     func shareUserMapSelection(index: Int) {
-        guard let tableViewController = drawerContentViewController as? BusinessTableViewController else { return }
+        guard let tableViewController = drawerContentViewController as? RestaurantTableViewController else { return }
         tableViewController.selectedIndex = index
     }
 
     func shareUserTableSelection(index: Int) {
-        guard let mapViewController = primaryContentViewController as? BusinessMapViewController else { return }
+        guard let mapViewController = primaryContentViewController as? RestaurantMapViewController else { return }
         mapViewController.selectedIndex = index
     }
 }

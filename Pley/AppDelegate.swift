@@ -16,12 +16,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         let mainContentVC = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "BusinessMapViewController")
+            .instantiateViewController(withIdentifier: "RestaurantMapViewController")
         let drawerContentVC = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "BusinessTableViewController")
-        let businessViewController = BusinessViewController(contentViewController: mainContentVC,
+            .instantiateViewController(withIdentifier: "RestaurantTableViewController")
+        let restaurantViewController = RestaurantViewController(contentViewController: mainContentVC,
                                                             drawerViewController: drawerContentVC)
-        window?.rootViewController = businessViewController
+        window?.rootViewController = restaurantViewController
         window?.makeKeyAndVisible()
 
         return true

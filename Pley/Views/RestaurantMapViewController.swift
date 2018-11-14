@@ -7,14 +7,14 @@ import RxMKMapView
 import Kingfisher
 import Pulley
 
-class BusinessMapViewController: UIViewController {
+class RestaurantMapViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchThisAreaButton: UIButton!
     @IBOutlet weak var userTrackButtonView: UIView!
     @IBOutlet weak var userControlViewBottomConstraint: NSLayoutConstraint!
     private var mapChangedFromUserInteraction = false
 
-    var viewModel: BusinessViewModel? {
+    var viewModel: RestaurantViewModel? {
         didSet {
             bindViewModel()
         }
@@ -28,7 +28,7 @@ class BusinessMapViewController: UIViewController {
     var selectedIndex: Int = 0 {
         didSet {
             for annotation in mapView.annotations {
-                if let ann = annotation as? BusinessAnnotation, ann.number == selectedIndex + 1 {
+                if let ann = annotation as? RestaurantAnnotation, ann.number == selectedIndex + 1 {
                     mapView.selectAnnotation(ann, animated: true)
                     return
                 }
@@ -75,8 +75,8 @@ class BusinessMapViewController: UIViewController {
 
         mapView.rx.didSelectAnnotationView
             .subscribe(onNext: { annotationView in
-                if let pulley = self.pulleyViewController as? BusinessViewController,
-                    let annotation = annotationView.annotation as? BusinessAnnotation {
+                if let pulley = self.pulleyViewController as? RestaurantViewController,
+                    let annotation = annotationView.annotation as? RestaurantAnnotation {
                     pulley.shareUserMapSelection(index: annotation.number - 1)
                 }
             })
@@ -154,7 +154,7 @@ class BusinessMapViewController: UIViewController {
 
 // MARK: - MKMapViewDelegate
 
-extension BusinessMapViewController: MKMapViewDelegate {
+extension RestaurantMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
@@ -167,7 +167,7 @@ extension BusinessMapViewController: MKMapViewDelegate {
 
 // MARK: - PulleyPrimaryContentControllerDelegate
 
-extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
+extension RestaurantMapViewController: PulleyPrimaryContentControllerDelegate {
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         if drawer.drawerPosition == .open {
             mapChangedFromUserInteraction = false
@@ -176,7 +176,7 @@ extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
 
     func drawerChangedDistanceFromBottom(drawer: PulleyViewController, distance: CGFloat, bottomSafeArea: CGFloat) {
         let trackButtonBottomDistance: CGFloat = 8.0
-        let partialRevealedDrawerHeight: CGFloat = BusinessTableViewController.Constants.partialRevealedDrawerHeight
+        let partialRevealedDrawerHeight: CGFloat = RestaurantTableViewController.Constants.partialRevealedDrawerHeight
 
         guard drawer.currentDisplayMode == .drawer else {
             userControlViewBottomConstraint.constant = trackButtonBottomDistance
