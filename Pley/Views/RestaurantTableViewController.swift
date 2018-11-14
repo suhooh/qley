@@ -63,7 +63,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
         bindTableView(viewModel)
     }
 
-    func bindSearchBar(_ viewModel: RestaurantViewModel) {
+    private func bindSearchBar(_ viewModel: RestaurantViewModel) {
         searchBar.rx.text.orEmpty.asDriver()
             .drive(searchText)
             .disposed(by: disposeBag)
@@ -97,7 +97,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
     }
 
-    func bindTableView(_ viewModel: RestaurantViewModel) {
+    private func bindTableView(_ viewModel: RestaurantViewModel) {
         /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
         Observable.of(
             viewModel.output.autocompletes
@@ -160,12 +160,12 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
     }
 
-    func searchBarResignFirstResponder() {
+    private func searchBarResignFirstResponder() {
         self.searchBar.resignFirstResponder()
         (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
     }
 
-    func displayNoItems(_ isOn: Bool) {
+    private func displayNoItems(_ isOn: Bool) {
         if isOn {
             let noItem: UILabel = UILabel()
             noItem.font = UIFont.boldSystemFont(ofSize: 16)
@@ -212,8 +212,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
 // MARK: - RxTableViewSectionedReloadDataSource
 
 extension RestaurantTableViewController {
-
-    static var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
+    private static var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
         return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(
             configureCell: { (dataSource, tableView, indexPath, _) in
                 switch dataSource[indexPath] {
@@ -236,17 +235,17 @@ extension RestaurantTableViewController {
     }
 }
 
-// MARK: - MultipleSectionModel
+// MARK: - MultipleSectionModel & SectionItem
 // type wrapper definition for multiple tableview data source
-
-enum MultipleSectionModel {
-    case autocompleteSection(items: [SectionItem])
-    case restaurantSection(items: [SectionItem])
-}
 
 enum SectionItem {
     case autocompleteItem(text: String)
     case restaurantItem(restaurant: Restaurant)
+}
+
+enum MultipleSectionModel {
+    case autocompleteSection(items: [SectionItem])
+    case restaurantSection(items: [SectionItem])
 }
 
 extension MultipleSectionModel: SectionModelType {

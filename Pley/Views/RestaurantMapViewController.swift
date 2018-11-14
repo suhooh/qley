@@ -42,7 +42,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
         checkLocationAuthorizationStatus()
     }
 
-    func checkLocationAuthorizationStatus() {
+    private func checkLocationAuthorizationStatus() {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             trackUserLocation()
         } else {
@@ -107,14 +107,14 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
     }
 
-    func centerMapOnLocation(location: CLLocation) {
+    private func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: 1000,
                                                   longitudinalMeters: 1000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 
-    func trackUserLocation() {
+    private func trackUserLocation() {
         mapView.showsUserLocation = true
         trackButton = MKUserTrackingButton(mapView: mapView)
         if let btn = trackButton {
@@ -124,7 +124,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
         locationManager.startUpdatingLocation()
     }
 
-    func showAnnotationsInVisibleRegion(offset: CGFloat) {
+    private func showAnnotationsInVisibleRegion(offset: CGFloat) {
         let ans = mapView.annotations
         if ans.isEmpty || (ans.count == 1 && ans[0].isEqual(mapView.userLocation)) { return }
 
