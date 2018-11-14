@@ -4,13 +4,14 @@ import RxCocoa
 import RxDataSources
 import Pulley
 
-class BusinessTableViewController: UIViewController {
+class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
+                                     UITableViewDelegate, PulleyDrawerViewControllerDelegate {
 
-    private struct Constants {
-        static let searchBarHeight: CGFloat = 63.0
+    struct Constants {
         static let partialRevealedDrawerHeight: CGFloat = 264.0
-        static let autocompletedRowHeight: CGFloat = 60
-        static let businessRowHeight: CGFloat = 110
+        fileprivate static let searchBarHeight: CGFloat = 63.0
+        fileprivate static let autocompletedRowHeight: CGFloat = 60
+        fileprivate static let restaurantRowHeight: CGFloat = 110
     }
 
     @IBOutlet weak var searchBar: UISearchBar!
@@ -18,13 +19,8 @@ class BusinessTableViewController: UIViewController {
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
-    var viewModel: BusinessViewModel? {
-        didSet {
-            bindViewModel()
-        }
-    }
-    private let disposeBag = DisposeBag()
     private let searchText = Variable<String>("")
+    private var previousDrawerPosition: PulleyPosition?
 
     var selectedIndex: Int = 0 {
         didSet {
@@ -46,7 +42,8 @@ class BusinessTableViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.pulleyViewController?.delegate = self
+        pulleyViewController?.delegate = self
+        previousDrawerPosition = pulleyViewController?.initialDrawerPosition
 
         // search bar UI
         searchBar.barTintColor = .clear
@@ -61,16 +58,14 @@ class BusinessTableViewController: UIViewController {
 //        }
     }
 
-    func bindViewModel() {
-        guard viewModel != nil else { return }
+    override func bind(viewModel: RestaurantViewModel) {
+        super.bind(viewModel: viewModel)
 
-        bindSearchBar()
-        bindTableView()
+        bindSearchBar(viewModel)
+        bindTableView(viewModel)
     }
 
-    func bindSearchBar() {
-        guard let viewModel = viewModel else { return }
-
+    private func bindSearchBar(_ viewModel: RestaurantViewModel) {
         searchBar.rx.text.orEmpty.asDriver()
             .drive(searchText)
             .disposed(by: disposeBag)
@@ -104,41 +99,39 @@ class BusinessTableViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    func bindTableView() {
-        guard let viewModel = viewModel else { return }
-
-        /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or businesses
+    private func bindTableView(_ viewModel: RestaurantViewModel) {
+        /// RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
         Observable.of(
             viewModel.output.autocompletes
                 .map { MultipleSectionModel.autocompleteSection(items: $0.map { str in
-                    SectionItem.autocompleteSectionItem(text: str)
+                    SectionItem.autocompleteItem(text: str)
                 })
             },
-            viewModel.output.businesses
-                .map { MultipleSectionModel.businessesSection(items: $0.map { bsn in
-                    SectionItem.businessesSectionItem(business: bsn)
+            viewModel.output.restaurants
+                .map { MultipleSectionModel.restaurantSection(items: $0.map { bsn in
+                    SectionItem.restaurantItem(restaurant: bsn)
                 })
             })
             .merge()
             .map { data -> [MultipleSectionModel] in
                 guard let item = data.items.first else { return [] }
                 switch item {
-                // returns [AutocompleteSection, BusinessesSection] format
-                case .autocompleteSectionItem: return [data, .businessesSection(items: [])]
-                case .businessesSectionItem: return [.autocompleteSection(items: []), data]
+                // returns [AutocompleteSection, RestaurantSection] format
+                case .autocompleteItem: return [data, .restaurantSection(items: [])]
+                case .restaurantItem: return [.autocompleteSection(items: []), data]
                 }
             }
-            .bind(to: tableView.rx.items(dataSource: BusinessTableViewController.dataSource))
+            .bind(to: tableView.rx.items(dataSource: RestaurantTableViewController.dataSource))
             .disposed(by: disposeBag)
 
         Observable
             .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(SectionItem.self))
-            // consume business selection
+            // consume restaurant selection
             .do(onNext: { indexPath, model in
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 switch model {
-                case .businessesSectionItem:
-                    if let pulley = self.pulleyViewController as? BusinessViewController {
+                case .restaurantItem:
+                    if let pulley = self.pulleyViewController as? RestaurantViewController {
                         pulley.shareUserTableSelection(index: indexPath.row)
                     }
                 default: break
@@ -147,8 +140,8 @@ class BusinessTableViewController: UIViewController {
             // consume autocomplete selection
             .map { _, model -> String? in
                 switch model {
-                case let .autocompleteSectionItem(text): return text
-                case .businessesSectionItem: return nil
+                case let .autocompleteItem(text): return text
+                case .restaurantItem: return nil
                 }
             }
             .filter { $0 != nil }
@@ -160,7 +153,7 @@ class BusinessTableViewController: UIViewController {
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
 
-        viewModel.output.businesses
+        viewModel.output.restaurants
             .subscribe(onNext: { data in self.displayNoItems(data.first == nil) })
             .disposed(by: disposeBag)
 
@@ -169,12 +162,12 @@ class BusinessTableViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    func searchBarResignFirstResponder() {
+    private func searchBarResignFirstResponder() {
         self.searchBar.resignFirstResponder()
         (self.searchBar.value(forKey: "cancelButton") as? UIButton)?.isEnabled = true
     }
 
-    func displayNoItems(_ isOn: Bool) {
+    private func displayNoItems(_ isOn: Bool) {
         if isOn {
             let noItem: UILabel = UILabel()
             noItem.font = UIFont.boldSystemFont(ofSize: 16)
@@ -188,18 +181,13 @@ class BusinessTableViewController: UIViewController {
             self.tableView.separatorStyle = .singleLine
         }
     }
-}
 
-// MARK: - UITableViewDelegate
-extension BusinessTableViewController: UITableViewDelegate {
+    // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? Constants.autocompletedRowHeight : Constants.businessRowHeight
+        return indexPath.section == 0 ? Constants.autocompletedRowHeight : Constants.restaurantRowHeight
     }
-}
 
-// MARK: - PulleyDrawerViewControllerDelegate
-
-extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
+    // MARK: - PulleyDrawerViewControllerDelegate
     // For devices with a bottom safe area ( e.g. iPhone X )
 
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {
@@ -219,49 +207,53 @@ extension BusinessTableViewController: PulleyDrawerViewControllerDelegate {
             drawer.drawerPosition == .partiallyRevealed
             ? view.frame.height - Constants.partialRevealedDrawerHeight - bottomSafeArea
             : 20
-        if drawer.drawerPosition != .open { searchBarResignFirstResponder() }
+        if previousDrawerPosition == .open &&
+            drawer.drawerPosition != .open &&
+            searchBar.isFirstResponder {
+            searchBarResignFirstResponder()
+        }
+
+        previousDrawerPosition = drawer.drawerPosition
     }
 }
 
 // MARK: - RxTableViewSectionedReloadDataSource
 
-extension BusinessTableViewController {
-
-    static var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
+extension RestaurantTableViewController {
+    private static var dataSource: RxTableViewSectionedReloadDataSource<MultipleSectionModel> {
         return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(
             configureCell: { (dataSource, tableView, indexPath, _) in
                 switch dataSource[indexPath] {
-                case let .autocompleteSectionItem(text):
+                case let .autocompleteItem(text):
                     guard let cell = tableView.dequeueReusableCell(
                         withIdentifier: AutocompletTableViewCell.reuseIdendifier,
                         for: indexPath) as? AutocompletTableViewCell
                         else { return UITableViewCell() }
                     cell.setUp(with: text)
                     return cell
-                case let .businessesSectionItem(business):
+                case let .restaurantItem(restaurant):
                     guard let cell = tableView.dequeueReusableCell(
-                        withIdentifier: BusinessTableViewCell.reuseIdendifier,
-                        for: indexPath) as? BusinessTableViewCell
+                        withIdentifier: RestaurantTableViewCell.reuseIdendifier,
+                        for: indexPath) as? RestaurantTableViewCell
                         else { return UITableViewCell() }
-                    cell.setUp(with: business, index: indexPath.row)
+                    cell.setUp(with: restaurant, index: indexPath.row)
                     return cell
                 }
         })
     }
-
 }
 
-// MARK: - MultipleSectionModel
+// MARK: - MultipleSectionModel & SectionItem
 // type wrapper definition for multiple tableview data source
+
+enum SectionItem {
+    case autocompleteItem(text: String)
+    case restaurantItem(restaurant: Restaurant)
+}
 
 enum MultipleSectionModel {
     case autocompleteSection(items: [SectionItem])
-    case businessesSection(items: [SectionItem])
-}
-
-enum SectionItem {
-    case autocompleteSectionItem(text: String)
-    case businessesSectionItem(business: Business)
+    case restaurantSection(items: [SectionItem])
 }
 
 extension MultipleSectionModel: SectionModelType {
@@ -270,14 +262,14 @@ extension MultipleSectionModel: SectionModelType {
     var items: [SectionItem] {
         switch self {
         case .autocompleteSection(items: let items): return items.map { $0 }
-        case .businessesSection(items: let items):   return items.map { $0 }
+        case .restaurantSection(items: let items):   return items.map { $0 }
         }
     }
 
     init(original: MultipleSectionModel, items: [Item]) {
         switch original {
         case .autocompleteSection(items: let items): self = .autocompleteSection(items: items)
-        case .businessesSection(items: let items):   self = .businessesSection(items: items)
+        case .restaurantSection(items: let items):   self = .restaurantSection(items: items)
         }
     }
 }

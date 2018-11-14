@@ -5,9 +5,11 @@ import Alamofire
 import SwiftyJSON
 
 class YelpAPIService {
-    private struct Constants {
-        static let baseURL = "https://api.yelp.com/v3/"
-        static let APIKey = "Bearer " // + "YOUR API KEY HERE"
+    struct Constants {
+        static let host = "api.yelp.com"
+        fileprivate static let baseURL = "https://" + host + "/v3/"
+        private static let APIKeyPrefix = "Bearer "
+        fileprivate static let APIKey =  APIKeyPrefix // + "YOUR API KEY HERE"
     }
 
     enum Resource: String {
@@ -20,6 +22,8 @@ class YelpAPIService {
     enum APIError: Error {
         case parseFailed
     }
+
+    let networking = Variable<Bool>(false)
 
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
@@ -34,12 +38,14 @@ class YelpAPIService {
             "radius": String(min(radius, 40000))
         ]
 
+        networking.value = true
         return RxAlamofire.requestJSON(.get, Resource.businessSearch.path,
                                        parameters: params,
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
             .flatMap { (_, json) -> Observable<BusinessSearchResponse> in
+                self.networking.value = false
                 guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else {
                     return Observable.error(APIError.parseFailed)
                 }

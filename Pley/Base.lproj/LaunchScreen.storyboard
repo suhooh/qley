@@ -18,13 +18,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DMX-Rq-nB0">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DMX-Rq-nB0">
                                 <rect key="frame" x="67.5" y="211" width="240" height="265"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="leaf" translatesAutoresizingMaskIntoConstraints="NO" id="Dzh-9Z-bC1">
-                                        <rect key="frame" x="-8" y="25" width="110" height="110"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="qley" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IFM-Hz-V0y">
                                         <rect key="frame" x="67" y="0.0" width="181" height="160"/>
                                         <constraints>
@@ -75,10 +71,19 @@
                                     <constraint firstAttribute="height" constant="265" id="qf9-On-oi9"/>
                                 </constraints>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="leaf2" translatesAutoresizingMaskIntoConstraints="NO" id="Dzh-9Z-bC1">
+                                <rect key="frame" x="117.5" y="273.5" width="140" height="140"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="5Hz-P9-YxU"/>
+                                    <constraint firstAttribute="height" constant="140" id="zMa-OS-zDU"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.76256740093231201" green="0.21693757176399231" blue="0.18427935242652893" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="Dzh-9Z-bC1" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="AGX-Lq-MKp"/>
                             <constraint firstItem="DMX-Rq-nB0" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Me5-xV-HKb"/>
+                            <constraint firstItem="Dzh-9Z-bC1" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="c77-vD-X5W"/>
                             <constraint firstItem="DMX-Rq-nB0" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="vnS-yU-82w"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -90,7 +95,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="leaf" width="1024" height="1024"/>
+        <image name="leaf2" width="1024" height="1024"/>
         <image name="yelp" width="250" height="160"/>
     </resources>
 </document>

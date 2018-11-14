@@ -3,7 +3,7 @@ import RxSwift
 import RxCocoa
 import MapKit
 
-final class BusinessViewModel: ViewModelType {
+final class RestaurantViewModel: ViewModelType {
 
     struct Input {
         let searchText: Variable<String>
@@ -12,9 +12,10 @@ final class BusinessViewModel: ViewModelType {
     }
 
     struct Output {
-        let businesses: Observable<[Business]>
-        let annotations: Observable<[BusinessAnnotation]>
+        let restaurants: Observable<[Restaurant]>
+        let annotations: Observable<[RestaurantAnnotation]>
         let autocompletes: Observable<[String]>
+        let networking: Variable<Bool>
     }
 
     let input: Input
@@ -26,6 +27,7 @@ final class BusinessViewModel: ViewModelType {
 
     init() {
         let yelpApiService = YelpAPIService()
+        let networking = yelpApiService.networking
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
@@ -38,16 +40,26 @@ final class BusinessViewModel: ViewModelType {
             }
             .share(replay: 1)
 
-        let businesses = businessSearchResponse.map { $0.businesses }
-        let annotations = businesses.map { businesses -> [BusinessAnnotation] in
-            businesses.enumerated().compactMap { idx, business -> BusinessAnnotation? in
-                guard let coordinate = business.coordinates?.clLocation2D else { return nil }
-                return BusinessAnnotation(number: idx + 1,
-                                          name: business.name,
-                                          category: business.categories?.first?.title ?? "",
-                                          coordinate: coordinate)
+        let restaurants = businessSearchResponse
+            .map { $0.businesses.map {
+                Restaurant(id: $0.id, name: $0.name, rating: $0.rating,
+                           distance: $0.distance, reviewCount: $0.reviewCount, price: $0.price,
+                           categories: $0.categories?.compactMap { cat in cat.title },
+                           location: $0.location?.displayAddress?.joined(separator: ", "),
+                           imageUrl: $0.imageUrl)
+                }
             }
-        }
+
+        let annotations = businessSearchResponse
+            .map { response -> [RestaurantAnnotation] in
+                response.businesses.enumerated().compactMap { idx, business -> RestaurantAnnotation? in
+                    guard let coordinate = business.coordinates?.clLocation2D else { return nil }
+                    return RestaurantAnnotation(number: idx + 1,
+                                                name: business.name,
+                                                category: business.categories?.first?.title ?? "",
+                                                coordinate: coordinate)
+                }
+            }
 
         let autocompleteResponse = Observable
             .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
@@ -64,9 +76,10 @@ final class BusinessViewModel: ViewModelType {
             return (response.terms?.compactMap { $0.text } ?? []) + (response.categories?.compactMap { $0.title } ?? [])
         }
 
-        self.output = Output(businesses: businesses,
+        self.output = Output(restaurants: restaurants,
                              annotations: annotations,
-                             autocompletes: autocompletes)
+                             autocompletes: autocompletes,
+                             networking: networking)
         self.input = Input(searchText: searchText,
                            doSearch: doSearchSubject.asObserver(),
                            regionAndRadius: regionAndRadius)

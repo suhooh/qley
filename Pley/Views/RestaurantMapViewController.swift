@@ -7,19 +7,15 @@ import RxMKMapView
 import Kingfisher
 import Pulley
 
-class BusinessMapViewController: UIViewController {
+class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
+                                   MKMapViewDelegate, PulleyPrimaryContentControllerDelegate {
+
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchThisAreaButton: UIButton!
     @IBOutlet weak var userTrackButtonView: UIView!
     @IBOutlet weak var userControlViewBottomConstraint: NSLayoutConstraint!
     private var mapChangedFromUserInteraction = false
 
-    var viewModel: BusinessViewModel? {
-        didSet {
-            bindViewModel()
-        }
-    }
-    private let disposeBag = DisposeBag()
     private let locationManager = CLLocationManager()
     private var trackButton: MKUserTrackingButton?
 
@@ -28,8 +24,11 @@ class BusinessMapViewController: UIViewController {
     var selectedIndex: Int = 0 {
         didSet {
             for annotation in mapView.annotations {
-                if let ann = annotation as? BusinessAnnotation, ann.number == selectedIndex + 1 {
+                if let ann = annotation as? RestaurantAnnotation, ann.number == selectedIndex + 1 {
                     mapView.selectAnnotation(ann, animated: true)
+                    if !mapView.annotations(in: mapView.visibleMapRect).contains(ann) {
+                        mapView.setCenter(ann.coordinate, animated: true)
+                    }
                     return
                 }
             }
@@ -43,7 +42,7 @@ class BusinessMapViewController: UIViewController {
         checkLocationAuthorizationStatus()
     }
 
-    func checkLocationAuthorizationStatus() {
+    private func checkLocationAuthorizationStatus() {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             trackUserLocation()
         } else {
@@ -51,8 +50,8 @@ class BusinessMapViewController: UIViewController {
         }
     }
 
-    func bindViewModel() {
-        guard let viewModel = viewModel else { return }
+    override func bind(viewModel: RestaurantViewModel) {
+        super.bind(viewModel: viewModel)
 
         mapView.rx
             .setDelegate(self)
@@ -75,8 +74,8 @@ class BusinessMapViewController: UIViewController {
 
         mapView.rx.didSelectAnnotationView
             .subscribe(onNext: { annotationView in
-                if let pulley = self.pulleyViewController as? BusinessViewController,
-                    let annotation = annotationView.annotation as? BusinessAnnotation {
+                if let pulley = self.pulleyViewController as? RestaurantViewController,
+                    let annotation = annotationView.annotation as? RestaurantAnnotation {
                     pulley.shareUserMapSelection(index: annotation.number - 1)
                 }
             })
@@ -108,14 +107,14 @@ class BusinessMapViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    func centerMapOnLocation(location: CLLocation) {
+    private func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: 1000,
                                                   longitudinalMeters: 1000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 
-    func trackUserLocation() {
+    private func trackUserLocation() {
         mapView.showsUserLocation = true
         trackButton = MKUserTrackingButton(mapView: mapView)
         if let btn = trackButton {
@@ -125,7 +124,7 @@ class BusinessMapViewController: UIViewController {
         locationManager.startUpdatingLocation()
     }
 
-    func showAnnotationsInVisibleRegion(offset: CGFloat) {
+    private func showAnnotationsInVisibleRegion(offset: CGFloat) {
         let ans = mapView.annotations
         if ans.isEmpty || (ans.count == 1 && ans[0].isEqual(mapView.userLocation)) { return }
 
@@ -150,11 +149,9 @@ class BusinessMapViewController: UIViewController {
         }
         return false
     }
-}
 
-// MARK: - MKMapViewDelegate
+    // MARK: - MKMapViewDelegate
 
-extension BusinessMapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
@@ -163,11 +160,9 @@ extension BusinessMapViewController: MKMapViewDelegate {
         view.annotation = annotation
         return view
     }
-}
 
-// MARK: - PulleyPrimaryContentControllerDelegate
+    // MARK: - PulleyPrimaryContentControllerDelegate
 
-extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         if drawer.drawerPosition == .open {
             mapChangedFromUserInteraction = false
@@ -176,7 +171,7 @@ extension BusinessMapViewController: PulleyPrimaryContentControllerDelegate {
 
     func drawerChangedDistanceFromBottom(drawer: PulleyViewController, distance: CGFloat, bottomSafeArea: CGFloat) {
         let trackButtonBottomDistance: CGFloat = 8.0
-        let partialRevealedDrawerHeight: CGFloat = 264.0
+        let partialRevealedDrawerHeight: CGFloat = RestaurantTableViewController.Constants.partialRevealedDrawerHeight
 
         guard drawer.currentDisplayMode == .drawer else {
             userControlViewBottomConstraint.constant = trackButtonBottomDistance
