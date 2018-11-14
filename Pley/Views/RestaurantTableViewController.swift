@@ -20,6 +20,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
     private let searchText = Variable<String>("")
+    private var previousDrawerPosition: PulleyPosition?
 
     var selectedIndex: Int = 0 {
         didSet {
@@ -41,7 +42,8 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.pulleyViewController?.delegate = self
+        pulleyViewController?.delegate = self
+        previousDrawerPosition = pulleyViewController?.initialDrawerPosition
 
         // search bar UI
         searchBar.barTintColor = .clear
@@ -205,7 +207,13 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             drawer.drawerPosition == .partiallyRevealed
             ? view.frame.height - Constants.partialRevealedDrawerHeight - bottomSafeArea
             : 20
-        if drawer.drawerPosition != .open { searchBarResignFirstResponder() }
+        if previousDrawerPosition == .open &&
+            drawer.drawerPosition != .open &&
+            searchBar.isFirstResponder {
+            searchBarResignFirstResponder()
+        }
+
+        previousDrawerPosition = drawer.drawerPosition
     }
 }
 
