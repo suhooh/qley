@@ -21,6 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .instantiateViewController(withIdentifier: "RestaurantTableViewController")
         let restaurantViewController = RestaurantViewController(contentViewController: mainContentVC,
                                                                 drawerViewController: drawerContentVC)
+
+        restaurantViewController.viewModel = RestaurantViewModel()
+
         window?.rootViewController = restaurantViewController
         window?.makeKeyAndVisible()
 
