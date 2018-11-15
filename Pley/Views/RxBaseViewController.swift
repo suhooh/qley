@@ -1,7 +1,7 @@
 import UIKit
 import RxSwift
 
-protocol RxBaseViewControllerProtocol {
+protocol RxBaseViewControllerProtocol: class {
     associatedtype ViewModelType
 
     func bind(viewModel: ViewModelType)
