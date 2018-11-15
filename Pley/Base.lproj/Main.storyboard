@@ -125,10 +125,10 @@
                                 <constraints>
                                     <constraint firstItem="EmS-Yc-d9h" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" constant="7" id="32O-U9-p5P"/>
                                     <constraint firstAttribute="height" priority="750" constant="63" id="5Jl-DZ-6TS"/>
-                                    <constraint firstItem="EmS-Yc-d9h" firstAttribute="leading" secondItem="sz4-rG-mlj" secondAttribute="leading" constant="6" id="6KA-LW-BVc"/>
                                     <constraint firstItem="FDD-ct-N2E" firstAttribute="centerX" secondItem="sz4-rG-mlj" secondAttribute="centerX" id="H1O-cE-w4U"/>
-                                    <constraint firstAttribute="trailing" secondItem="EmS-Yc-d9h" secondAttribute="trailing" constant="6" id="VhH-MD-Prj"/>
+                                    <constraint firstAttribute="width" secondItem="EmS-Yc-d9h" secondAttribute="width" priority="750" constant="12" id="Vkj-tc-aMr"/>
                                     <constraint firstItem="FDD-ct-N2E" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" constant="6" id="jc6-Di-eOQ"/>
+                                    <constraint firstItem="EmS-Yc-d9h" firstAttribute="centerX" secondItem="sz4-rG-mlj" secondAttribute="centerX" id="mrp-9E-2Ns"/>
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uck-sy-EnB">
@@ -343,7 +343,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Xv9-1B-Jl4" firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" constant="20" id="AAq-Ot-PCd"/>
+                            <constraint firstItem="Xv9-1B-Jl4" firstAttribute="bottom" secondItem="uck-sy-EnB" secondAttribute="bottom" priority="750" constant="20" id="AAq-Ot-PCd"/>
                             <constraint firstItem="sz4-rG-mlj" firstAttribute="width" secondItem="Hen-h4-pDu" secondAttribute="width" id="MRo-kl-Qfd"/>
                             <constraint firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="top" id="O9F-yy-hOh"/>
                             <constraint firstItem="uck-sy-EnB" firstAttribute="top" secondItem="sz4-rG-mlj" secondAttribute="bottom" id="WQT-ki-xU7"/>
