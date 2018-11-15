@@ -7,18 +7,19 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
 
     private let viewModel = RestaurantViewModel()
     private let disposeBag = DisposeBag()
-    private var progressView: DSGradientProgressView?
+    lazy var progressView: DSGradientProgressView = {
+        let progress = DSGradientProgressView(frame: CGRect(origin: CGPoint(x: 0, y: 0),
+                                                            size: CGSize(width: view.frame.width, height: 3)))
+        progress.barColor = #colorLiteral(red: 0.3963322639, green: 0.6601038575, blue: 0.9536740184, alpha: 1)
+        progress.isHidden = true
+        view.addSubview(progress)
+        return progress
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         animationDuration = 0.5
-
-        progressView = DSGradientProgressView(frame: CGRect(origin: CGPoint(x: 0, y: 0),
-                                                            size: CGSize(width: view.frame.width, height: 3)))
-        progressView?.barColor = #colorLiteral(red: 0.3963322639, green: 0.6601038575, blue: 0.9536740184, alpha: 1)
-        progressView?.isHidden = true
-        view.addSubview(progressView!)
 
         guard let mapViewController = primaryContentViewController as? RestaurantMapViewController,
             let tableViewController = drawerContentViewController as? RestaurantTableViewController
@@ -40,8 +41,8 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
 
     func bind(viewModel: RestaurantViewModel) {
         viewModel.output.networking.asObservable()
-            .subscribe(onNext: { isNetworking in
-                isNetworking ? self.progressView?.wait() : self.progressView?.signal()
+            .subscribe(onNext: { [weak self] isNetworking in
+                isNetworking ? self?.progressView.wait() : self?.progressView.signal()
             })
             .disposed(by: disposeBag)
     }

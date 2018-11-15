@@ -44,8 +44,8 @@ class YelpAPIService {
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
-            .flatMap { (_, json) -> Observable<BusinessSearchResponse> in
-                self.networking.value = false
+            .flatMap { [weak self] (_, json) -> Observable<BusinessSearchResponse> in
+                self?.networking.value = false
                 guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else {
                     return Observable.error(APIError.parseFailed)
                 }
