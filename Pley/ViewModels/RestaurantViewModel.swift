@@ -64,6 +64,7 @@ final class RestaurantViewModel: ViewModelType {
 
         let autocompleteResponse = Observable
             .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
+            .debounce(0.5, scheduler: MainScheduler.instance)
             .distinctUntilChanged { $0.0 == $1.0 }
             .flatMapLatest { $0.0.isEmpty
                 ? Observable.just(AutocompleteResponse())
