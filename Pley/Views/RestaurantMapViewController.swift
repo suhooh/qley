@@ -23,7 +23,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
                 if let restaurant = annotation as? RestaurantAnnotation, restaurant.number == selectedIndex + 1 {
                     mapView.selectAnnotation(restaurant, animated: true)
                     if !mapView.annotations(in: mapView.visibleMapRect).contains(restaurant) {
-                        mapView.setCenter(restaurant.coordinate, animated: true)
+                        showAnnotationsInVisibleRegion(offset: self.properBottomConstraint)
                     }
                     return
                 }
@@ -115,8 +115,8 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
 
     private func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
-                                                  latitudinalMeters: 1000,
-                                                  longitudinalMeters: 1000)
+                                                  latitudinalMeters: 2000,
+                                                  longitudinalMeters: 2000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 
