@@ -5,8 +5,10 @@ import MapKit
 
 final class RestaurantViewModel: ViewModelType {
 
+    typealias NeedsAutocomplete = Bool
+
     struct Input {
-        let searchText: Variable<String>
+        let searchText: Variable<(String, NeedsAutocomplete)>
         let doSearch: AnyObserver<Void>
         let regionAndRadius: Variable<(MKCoordinateRegion, Double)>
     }
@@ -22,7 +24,7 @@ final class RestaurantViewModel: ViewModelType {
     let input: Input
     let output: Output
 
-    private let searchText = Variable<String>("")
+    private let searchText = Variable<(String, NeedsAutocomplete)>(("", false))
     private let doSearchSubject = PublishSubject<Void>()
     private let regionAndRadius = Variable<(MKCoordinateRegion, Double)>((MKCoordinateRegion(), 0.0))
 
@@ -32,13 +34,15 @@ final class RestaurantViewModel: ViewModelType {
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
-            .flatMapLatest { $0.0.isEmpty
-                ? Observable.just(BusinessSearchResponse())
-                : yelpApiService.search($0.0,
-                                        latitude: $0.1.0.center.latitude,
-                                        longitude: $0.1.0.center.longitude,
-                                        radius: Int($0.1.1))
-            }
+            .flatMapLatest({ arg0 -> Observable<BusinessSearchResponse> in
+                let ((text, _), (region, radius)) = arg0
+                return text.isEmpty
+                    ? Observable.just(BusinessSearchResponse())
+                    : yelpApiService.search(text,
+                                            latitude: region.center.latitude,
+                                            longitude: region.center.longitude,
+                                            radius: Int(radius))
+            })
             .share(replay: 1)
 
         let restaurants = businessSearchResponse
@@ -64,14 +68,24 @@ final class RestaurantViewModel: ViewModelType {
 
         let autocompleteResponse = Observable
             .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
-            .debounce(0.5, scheduler: MainScheduler.instance)
-            .distinctUntilChanged { $0.0 == $1.0 }
-            .flatMapLatest { $0.0.isEmpty
-                ? Observable.just(AutocompleteResponse())
-                : yelpApiService.autocomplete($0.0,
-                                              latitude: $0.1.0.center.latitude,
-                                              longitude: $0.1.0.center.longitude)
+            .filter({ (arg0, _) -> Bool in
+                let (_, needsAutocomplete) = arg0
+                return needsAutocomplete
+            })
+            .debounce(0.3, scheduler: MainScheduler.instance)
+            .distinctUntilChanged { arg0, arg1 -> Bool in
+                let ((text0, _), (_, _)) = arg0
+                let ((text1, _), (_, _)) = arg1
+                return text0 == text1
             }
+            .flatMapLatest({ arg0 -> Observable<AutocompleteResponse> in
+                let ((text, _), (region, _)) = arg0
+                return text.isEmpty
+                    ? Observable.just(AutocompleteResponse())
+                    : yelpApiService.autocomplete(text,
+                                            latitude: region.center.latitude,
+                                            longitude: region.center.longitude)
+            })
             .share(replay: 1)
 
         let autocompletes = autocompleteResponse.map { response -> [String] in
@@ -79,7 +93,7 @@ final class RestaurantViewModel: ViewModelType {
         }
 
         let searchTextChanged = searchText.asObservable()
-            .distinctUntilChanged()
+            .distinctUntilChanged { $0.0 == $1.0 }
             .map { _ in true }
 
         self.output = Output(restaurants: restaurants,

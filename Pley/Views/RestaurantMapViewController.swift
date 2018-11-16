@@ -58,7 +58,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
         Observable
             .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchText.asObservable())
             .do(onNext: { [unowned self] _, term in
-                self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
+                self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.0.isEmpty)
             })
             .map { [unowned self] region, _ in return (region, self.mapView.currentRadius) }
             .bind(to: viewModel.input.regionAndRadius)

@@ -28,6 +28,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
     private let searchText = Variable<String>("")
+    private var needsAutocomplete: Bool = true
     private var previousDrawerPosition: PulleyPosition?
     var selectedIndex: Int = 0 {
         didSet {
@@ -90,6 +91,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         searchText.asObservable()
+            .map { [unowned self] in ($0, self.needsAutocomplete) }
             .bind(to: viewModel.input.searchText)
             .disposed(by: disposeBag)
 
@@ -161,7 +163,9 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             }
             .filter { $0 != nil }
             .do(onNext: { [unowned self] str in
+                self.needsAutocomplete = false
                 self.searchText.value = str ?? ""
+                self.needsAutocomplete = true
                 self.searchBarResignFirstResponder()
             })
             .map { _ in }
