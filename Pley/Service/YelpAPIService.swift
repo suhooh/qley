@@ -4,7 +4,8 @@ import RxAlamofire
 import Alamofire
 import SwiftyJSON
 
-class YelpAPIService {
+class YelpAPIService: YelpAPIServiceProtocol {
+
     struct Constants {
         static let host = "api.yelp.com"
         fileprivate static let baseURL = "https://" + host + "/v3/"
@@ -23,7 +24,7 @@ class YelpAPIService {
         case parseFailed
     }
 
-    let networking = Variable<Bool>(false)
+    var networking = Variable<Bool>(false)
 
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {

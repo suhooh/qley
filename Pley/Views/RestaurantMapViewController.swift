@@ -87,7 +87,6 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         viewModel.output.annotations
-            .asDriver(onErrorJustReturn: [])
             .do(onNext: { [unowned self] annotations in
                 self.mapView.showAnnotations(annotations, animated: true)
                 self.showAnnotationsInVisibleRegion(offset: self.properBottomConstraint)

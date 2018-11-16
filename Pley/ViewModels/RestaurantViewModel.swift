@@ -13,10 +13,10 @@ final class RestaurantViewModel: ViewModelType {
 
     struct Output {
         let restaurants: Observable<[Restaurant]>
-        let annotations: Observable<[RestaurantAnnotation]>
         let autocompletes: Observable<[String]>
-        let networking: Variable<Bool>
+        let annotations: Driver<[RestaurantAnnotation]>
         let searchTermChanged: Observable<Void>
+        let networking: Variable<Bool>
     }
 
     let input: Input
@@ -26,9 +26,7 @@ final class RestaurantViewModel: ViewModelType {
     private let searchArea = Variable<SearchArea>(SearchArea())
     private let doSearchSubject = PublishSubject<Void>()
 
-    init() {
-        let yelpApiService = YelpAPIService()
-        let networking = yelpApiService.networking
+    init(with yelpApiService: YelpAPIServiceProtocol = YelpAPIService()) {
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchTerm.asObservable(), searchArea.asObservable()))
@@ -62,6 +60,7 @@ final class RestaurantViewModel: ViewModelType {
                                                 coordinate: coordinate)
                 }
             }
+            .asDriver(onErrorJustReturn: [])
 
         let autocompleteResponse = Observable
             .combineLatest(searchTerm.asObservable(), searchArea.asObservable())
@@ -90,10 +89,10 @@ final class RestaurantViewModel: ViewModelType {
             .map { _ in }
 
         self.output = Output(restaurants: restaurants,
-                             annotations: annotations,
                              autocompletes: autocompletes,
-                             networking: networking,
-                             searchTermChanged: searchTermChanged)
+                             annotations: annotations,
+                             searchTermChanged: searchTermChanged,
+                             networking: yelpApiService.networking)
         self.input = Input(searchTerm: searchTerm,
                            searchArea: searchArea,
                            doSearch: doSearchSubject.asObserver())
