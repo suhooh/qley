@@ -5,12 +5,10 @@ import MapKit
 
 final class RestaurantViewModel: ViewModelType {
 
-    typealias NeedsAutocomplete = Bool
-
     struct Input {
-        let searchText: Variable<(String, NeedsAutocomplete)>
+        let searchTerm: Variable<SearchTerm>
+        let searchArea: Variable<SearchArea>
         let doSearch: AnyObserver<Void>
-        let regionAndRadius: Variable<(MKCoordinateRegion, Double)>
     }
 
     struct Output {
@@ -18,31 +16,30 @@ final class RestaurantViewModel: ViewModelType {
         let annotations: Observable<[RestaurantAnnotation]>
         let autocompletes: Observable<[String]>
         let networking: Variable<Bool>
-        let searchTextChanged: Observable<Bool>
+        let searchTermChanged: Observable<Void>
     }
 
     let input: Input
     let output: Output
 
-    private let searchText = Variable<(String, NeedsAutocomplete)>(("", false))
+    private let searchTerm = Variable<SearchTerm>(SearchTerm())
+    private let searchArea = Variable<SearchArea>(SearchArea())
     private let doSearchSubject = PublishSubject<Void>()
-    private let regionAndRadius = Variable<(MKCoordinateRegion, Double)>((MKCoordinateRegion(), 0.0))
 
     init() {
         let yelpApiService = YelpAPIService()
         let networking = yelpApiService.networking
 
         let businessSearchResponse = doSearchSubject
-            .withLatestFrom(Observable.combineLatest(searchText.asObservable(), regionAndRadius.asObservable()))
-            .flatMapLatest({ arg0 -> Observable<BusinessSearchResponse> in
-                let ((text, _), (region, radius)) = arg0
-                return text.isEmpty
+            .withLatestFrom(Observable.combineLatest(searchTerm.asObservable(), searchArea.asObservable()))
+            .flatMapLatest { term, area -> Observable<BusinessSearchResponse> in
+                return term.isEmpty
                     ? Observable.just(BusinessSearchResponse())
-                    : yelpApiService.search(text,
-                                            latitude: region.center.latitude,
-                                            longitude: region.center.longitude,
-                                            radius: Int(radius))
-            })
+                    : yelpApiService.search(term.value,
+                                            latitude: area.latitude,
+                                            longitude: area.longitude,
+                                            radius: Int(area.radius))
+            }
             .share(replay: 1)
 
         let restaurants = businessSearchResponse
@@ -67,42 +64,38 @@ final class RestaurantViewModel: ViewModelType {
             }
 
         let autocompleteResponse = Observable
-            .combineLatest(searchText.asObservable(), regionAndRadius.asObservable())
-            .filter({ (arg0, _) -> Bool in
-                let (_, needsAutocomplete) = arg0
-                return needsAutocomplete
-            })
+            .combineLatest(searchTerm.asObservable(), searchArea.asObservable())
+            .filter { term, _ -> Bool in return term.needsAutocomplete }
             .debounce(0.3, scheduler: MainScheduler.instance)
             .distinctUntilChanged { arg0, arg1 -> Bool in
-                let ((text0, _), (_, _)) = arg0
-                let ((text1, _), (_, _)) = arg1
-                return text0 == text1
+                let (term1, _) = arg0
+                let (term2, _) = arg1
+                return term1 == term2
             }
-            .flatMapLatest({ arg0 -> Observable<AutocompleteResponse> in
-                let ((text, _), (region, _)) = arg0
-                return text.isEmpty
+            .flatMapLatest { term, area -> Observable<AutocompleteResponse> in
+                return term.isEmpty
                     ? Observable.just(AutocompleteResponse())
-                    : yelpApiService.autocomplete(text,
-                                            latitude: region.center.latitude,
-                                            longitude: region.center.longitude)
-            })
+                    : yelpApiService.autocomplete(term.value,
+                                                  latitude: area.latitude,
+                                                  longitude: area.longitude)
+            }
             .share(replay: 1)
 
         let autocompletes = autocompleteResponse.map { response -> [String] in
             return (response.terms?.compactMap { $0.text } ?? []) + (response.categories?.compactMap { $0.title } ?? [])
         }
 
-        let searchTextChanged = searchText.asObservable()
-            .distinctUntilChanged { $0.0 == $1.0 }
-            .map { _ in true }
+        let searchTermChanged = searchTerm.asObservable()
+            .distinctUntilChanged()
+            .map { _ in }
 
         self.output = Output(restaurants: restaurants,
                              annotations: annotations,
                              autocompletes: autocompletes,
                              networking: networking,
-                             searchTextChanged: searchTextChanged)
-        self.input = Input(searchText: searchText,
-                           doSearch: doSearchSubject.asObserver(),
-                           regionAndRadius: regionAndRadius)
+                             searchTermChanged: searchTermChanged)
+        self.input = Input(searchTerm: searchTerm,
+                           searchArea: searchArea,
+                           doSearch: doSearchSubject.asObserver())
     }
 }

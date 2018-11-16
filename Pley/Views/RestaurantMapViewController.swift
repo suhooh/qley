@@ -56,12 +56,14 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         Observable
-            .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchText.asObservable())
+            .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchTerm.asObservable())
             .do(onNext: { [unowned self] _, term in
-                self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.0.isEmpty)
+                self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
             })
-            .map { [unowned self] region, _ in return (region, self.mapView.currentRadius) }
-            .bind(to: viewModel.input.regionAndRadius)
+            .map { [unowned self] region, _ in
+                return SearchArea(coordinate: region.center, radius: self.mapView.currentRadius)
+            }
+            .bind(to: viewModel.input.searchArea)
             .disposed(by: disposeBag)
 
         mapView.rx.regionWillChangeAnimated
@@ -93,8 +95,8 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
 
-        viewModel.output.searchTextChanged
-            .subscribe(onNext: { [unowned self] _ in self.mapView.removeAnnotations(self.mapView.annotations) })
+        viewModel.output.searchTermChanged
+            .subscribe(onNext: { [unowned self] in self.mapView.removeAnnotations(self.mapView.annotations) })
             .disposed(by: disposeBag)
 
         locationManager.rx.didUpdateLocations

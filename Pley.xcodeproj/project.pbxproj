@@ -10,6 +10,8 @@
 		5B5346E405C034EE0BB545CF /* Pods_Pley.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB80012C47927E6620F8DD /* Pods_Pley.framework */; };
 		8B45C68F219A5E8A0079770E /* NumberAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */; };
 		8B45D070219B99EA00E045E8 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45D06F219B99EA00E045E8 /* Restaurant.swift */; };
+		8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980BA219E568D00C33E2A /* SearchTerm.swift */; };
+		8B7980BD219E5E9E00C33E2A /* SearchArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980BC219E5E9E00C33E2A /* SearchArea.swift */; };
 		8B95582E219A0E0F005BBDC2 /* DispatchQueue+once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582D219A0E0F005BBDC2 /* DispatchQueue+once.swift */; };
 		8B955830219A2A54005BBDC2 /* MKMapView+radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582F219A2A54005BBDC2 /* MKMapView+radius.swift */; };
 		8B9D0254219BB1D200E1B64C /* RxBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D0253219BB1D200E1B64C /* RxBaseViewController.swift */; };
@@ -55,6 +57,8 @@
 		6668E757E08375710F71F451 /* Pods-Pley.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pley.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pley/Pods-Pley.debug.xcconfig"; sourceTree = "<group>"; };
 		8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAnnotationView.swift; sourceTree = "<group>"; };
 		8B45D06F219B99EA00E045E8 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
+		8B7980BA219E568D00C33E2A /* SearchTerm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTerm.swift; sourceTree = "<group>"; };
+		8B7980BC219E5E9E00C33E2A /* SearchArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchArea.swift; sourceTree = "<group>"; };
 		8B95582D219A0E0F005BBDC2 /* DispatchQueue+once.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+once.swift"; sourceTree = "<group>"; };
 		8B95582F219A2A54005BBDC2 /* MKMapView+radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+radius.swift"; sourceTree = "<group>"; };
 		8B9D0253219BB1D200E1B64C /* RxBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseViewController.swift; sourceTree = "<group>"; };
@@ -192,6 +196,8 @@
 			children = (
 				8BCBD41E2197B1F800966CE8 /* ViewModelType.swift */,
 				8BCBD40C2194BA5900966CE8 /* RestaurantViewModel.swift */,
+				8B7980BA219E568D00C33E2A /* SearchTerm.swift */,
+				8B7980BC219E5E9E00C33E2A /* SearchArea.swift */,
 				8B45D06F219B99EA00E045E8 /* Restaurant.swift */,
 				8BCBD410219574BD00966CE8 /* RestaurantAnnotation.swift */,
 			);
@@ -488,6 +494,8 @@
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,
 				8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */,
 				8BCBD3B32194A42900966CE8 /* RestaurantViewController.swift in Sources */,
+				8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */,
+				8B7980BD219E5E9E00C33E2A /* SearchArea.swift in Sources */,
 				8BCBD41F2197B1F800966CE8 /* ViewModelType.swift in Sources */,
 				8BCBD4132195F75700966CE8 /* RestaurantTableViewCell.swift in Sources */,
 				8B9D0254219BB1D200E1B64C /* RxBaseViewController.swift in Sources */,

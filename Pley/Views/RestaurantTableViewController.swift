@@ -27,7 +27,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
-    private let searchText = Variable<String>("")
+    private let searchString = Variable<String>("")
     private var needsAutocomplete: Bool = true
     private var previousDrawerPosition: PulleyPosition?
     var selectedIndex: Int = 0 {
@@ -83,16 +83,16 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
 
     private func bindSearchBar(_ viewModel: RestaurantViewModel) {
         searchBar.rx.text.orEmpty.asDriver()
-            .drive(searchText)
+            .drive(searchString)
             .disposed(by: disposeBag)
 
-        searchText.asObservable()
+        searchString.asObservable()
             .subscribe(onNext: { [unowned self] in self.searchBar.text = $0 })
             .disposed(by: disposeBag)
 
-        searchText.asObservable()
-            .map { [unowned self] in ($0, self.needsAutocomplete) }
-            .bind(to: viewModel.input.searchText)
+        searchString.asObservable()
+            .map { [unowned self] in SearchTerm($0, autocomplete: self.needsAutocomplete) }
+            .bind(to: viewModel.input.searchTerm)
             .disposed(by: disposeBag)
 
         searchBar.rx.searchButtonClicked
@@ -164,7 +164,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .filter { $0 != nil }
             .do(onNext: { [unowned self] str in
                 self.needsAutocomplete = false
-                self.searchText.value = str ?? ""
+                self.searchString.value = str ?? ""
                 self.needsAutocomplete = true
                 self.searchBarResignFirstResponder()
             })
