@@ -8,17 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		5B5346E405C034EE0BB545CF /* Pods_Pley.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB80012C47927E6620F8DD /* Pods_Pley.framework */; };
+		8B225C3C21A09EF800DDB583 /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C3B21A09EF800DDB583 /* Responses.swift */; };
 		8B45C68F219A5E8A0079770E /* NumberAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */; };
 		8B45D070219B99EA00E045E8 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45D06F219B99EA00E045E8 /* Restaurant.swift */; };
-		8B95582E219A0E0F005BBDC2 /* DispatchQueue+once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582D219A0E0F005BBDC2 /* DispatchQueue+once.swift */; };
-		8B955830219A2A54005BBDC2 /* MKMapView+radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582F219A2A54005BBDC2 /* MKMapView+radius.swift */; };
+		8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980BA219E568D00C33E2A /* SearchTerm.swift */; };
+		8B7980BD219E5E9E00C33E2A /* SearchArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980BC219E5E9E00C33E2A /* SearchArea.swift */; };
+		8B7980C1219F3C2600C33E2A /* YelpAPIServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980C0219F3C2600C33E2A /* YelpAPIServiceProtocol.swift */; };
+		8B7980C3219F3D3C00C33E2A /* MockYelpAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980C2219F3D3C00C33E2A /* MockYelpAPIService.swift */; };
+		8B95582E219A0E0F005BBDC2 /* DispatchQueue+Once.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582D219A0E0F005BBDC2 /* DispatchQueue+Once.swift */; };
+		8B955830219A2A54005BBDC2 /* MKMapView+Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B95582F219A2A54005BBDC2 /* MKMapView+Radius.swift */; };
 		8B9D0254219BB1D200E1B64C /* RxBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9D0253219BB1D200E1B64C /* RxBaseViewController.swift */; };
 		8BCBD3B12194A42900966CE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD3B02194A42900966CE8 /* AppDelegate.swift */; };
 		8BCBD3B32194A42900966CE8 /* RestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD3B22194A42900966CE8 /* RestaurantViewController.swift */; };
 		8BCBD3B62194A42900966CE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BCBD3B42194A42900966CE8 /* Main.storyboard */; };
 		8BCBD3B82194A42900966CE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BCBD3B72194A42900966CE8 /* Assets.xcassets */; };
 		8BCBD3BB2194A42900966CE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BCBD3B92194A42900966CE8 /* LaunchScreen.storyboard */; };
-		8BCBD3C62194A42A00966CE8 /* PleyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD3C52194A42A00966CE8 /* PleyTests.swift */; };
+		8BCBD3C62194A42A00966CE8 /* RestaurantViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD3C52194A42A00966CE8 /* RestaurantViewModelTests.swift */; };
 		8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4002194A7DA00966CE8 /* Business.swift */; };
 		8BCBD4032194B77700966CE8 /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4022194B77700966CE8 /* Category.swift */; };
 		8BCBD4052194B7A400966CE8 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BCBD4042194B7A400966CE8 /* Coordinate.swift */; };
@@ -53,10 +58,15 @@
 		3AC6F8F2C49123B6363A2D2C /* Pods-Pley.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pley.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pley/Pods-Pley.release.xcconfig"; sourceTree = "<group>"; };
 		40FB80012C47927E6620F8DD /* Pods_Pley.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pley.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6668E757E08375710F71F451 /* Pods-Pley.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pley.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pley/Pods-Pley.debug.xcconfig"; sourceTree = "<group>"; };
+		8B225C3B21A09EF800DDB583 /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
 		8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAnnotationView.swift; sourceTree = "<group>"; };
 		8B45D06F219B99EA00E045E8 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
-		8B95582D219A0E0F005BBDC2 /* DispatchQueue+once.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+once.swift"; sourceTree = "<group>"; };
-		8B95582F219A2A54005BBDC2 /* MKMapView+radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+radius.swift"; sourceTree = "<group>"; };
+		8B7980BA219E568D00C33E2A /* SearchTerm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTerm.swift; sourceTree = "<group>"; };
+		8B7980BC219E5E9E00C33E2A /* SearchArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchArea.swift; sourceTree = "<group>"; };
+		8B7980C0219F3C2600C33E2A /* YelpAPIServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPIServiceProtocol.swift; sourceTree = "<group>"; };
+		8B7980C2219F3D3C00C33E2A /* MockYelpAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockYelpAPIService.swift; sourceTree = "<group>"; };
+		8B95582D219A0E0F005BBDC2 /* DispatchQueue+Once.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+Once.swift"; sourceTree = "<group>"; };
+		8B95582F219A2A54005BBDC2 /* MKMapView+Radius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Radius.swift"; sourceTree = "<group>"; };
 		8B9D0253219BB1D200E1B64C /* RxBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxBaseViewController.swift; sourceTree = "<group>"; };
 		8BCBD3AD2194A42900966CE8 /* Pley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BCBD3B02194A42900966CE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +76,7 @@
 		8BCBD3BA2194A42900966CE8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8BCBD3BC2194A42900966CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BCBD3C12194A42A00966CE8 /* PleyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PleyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8BCBD3C52194A42A00966CE8 /* PleyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PleyTests.swift; sourceTree = "<group>"; };
+		8BCBD3C52194A42A00966CE8 /* RestaurantViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModelTests.swift; sourceTree = "<group>"; };
 		8BCBD3C72194A42A00966CE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8BCBD4002194A7DA00966CE8 /* Business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Business.swift; sourceTree = "<group>"; };
 		8BCBD4022194B77700966CE8 /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -120,8 +130,8 @@
 		8B95582C219A0DF3005BBDC2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8B95582D219A0E0F005BBDC2 /* DispatchQueue+once.swift */,
-				8B95582F219A2A54005BBDC2 /* MKMapView+radius.swift */,
+				8B95582D219A0E0F005BBDC2 /* DispatchQueue+Once.swift */,
+				8B95582F219A2A54005BBDC2 /* MKMapView+Radius.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -166,7 +176,9 @@
 		8BCBD3C42194A42A00966CE8 /* PleyTests */ = {
 			isa = PBXGroup;
 			children = (
-				8BCBD3C52194A42A00966CE8 /* PleyTests.swift */,
+				8B225C3B21A09EF800DDB583 /* Responses.swift */,
+				8B7980C2219F3D3C00C33E2A /* MockYelpAPIService.swift */,
+				8BCBD3C52194A42A00966CE8 /* RestaurantViewModelTests.swift */,
 				8BCBD3C72194A42A00966CE8 /* Info.plist */,
 			);
 			path = PleyTests;
@@ -192,6 +204,8 @@
 			children = (
 				8BCBD41E2197B1F800966CE8 /* ViewModelType.swift */,
 				8BCBD40C2194BA5900966CE8 /* RestaurantViewModel.swift */,
+				8B7980BA219E568D00C33E2A /* SearchTerm.swift */,
+				8B7980BC219E5E9E00C33E2A /* SearchArea.swift */,
 				8B45D06F219B99EA00E045E8 /* Restaurant.swift */,
 				8BCBD410219574BD00966CE8 /* RestaurantAnnotation.swift */,
 			);
@@ -201,6 +215,7 @@
 		8BCBD3FE2194A59F00966CE8 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				8B7980C0219F3C2600C33E2A /* YelpAPIServiceProtocol.swift */,
 				8BCBD40E2194C16700966CE8 /* YelpAPIService.swift */,
 			);
 			path = Service;
@@ -262,6 +277,7 @@
 				8BCBD3BD2194A42A00966CE8 /* Sources */,
 				8BCBD3BE2194A42A00966CE8 /* Frameworks */,
 				8BCBD3BF2194A42A00966CE8 /* Resources */,
+				BE4AC0FBE94688B9AE67DEA3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -421,6 +437,34 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BE4AC0FBE94688B9AE67DEA3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-PleyTests/Pods-PleyTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxAtomic/RxAtomic.framework",
+				"${BUILT_PRODUCTS_DIR}/RxBlocking/RxBlocking.framework",
+				"${BUILT_PRODUCTS_DIR}/RxTest/RxTest.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxAtomic.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxBlocking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxTest.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PleyTests/Pods-PleyTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		E3BC87413287AE2E3988EACC /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -459,6 +503,8 @@
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,
 				8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */,
 				8BCBD3B32194A42900966CE8 /* RestaurantViewController.swift in Sources */,
+				8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */,
+				8B7980BD219E5E9E00C33E2A /* SearchArea.swift in Sources */,
 				8BCBD41F2197B1F800966CE8 /* ViewModelType.swift in Sources */,
 				8BCBD4132195F75700966CE8 /* RestaurantTableViewCell.swift in Sources */,
 				8B9D0254219BB1D200E1B64C /* RxBaseViewController.swift in Sources */,
@@ -466,11 +512,12 @@
 				8BCBD3B12194A42900966CE8 /* AppDelegate.swift in Sources */,
 				8BCBD4192196B4A100966CE8 /* AutocompleteResponse.swift in Sources */,
 				8BCBD4032194B77700966CE8 /* Category.swift in Sources */,
+				8B7980C1219F3C2600C33E2A /* YelpAPIServiceProtocol.swift in Sources */,
 				8BCBD411219574BD00966CE8 /* RestaurantAnnotation.swift in Sources */,
 				8BCBD4092194B7FD00966CE8 /* Region.swift in Sources */,
-				8B95582E219A0E0F005BBDC2 /* DispatchQueue+once.swift in Sources */,
+				8B95582E219A0E0F005BBDC2 /* DispatchQueue+Once.swift in Sources */,
 				8BCBD41B2196B58000966CE8 /* Term.swift in Sources */,
-				8B955830219A2A54005BBDC2 /* MKMapView+radius.swift in Sources */,
+				8B955830219A2A54005BBDC2 /* MKMapView+Radius.swift in Sources */,
 				8BCBD4072194B7E200966CE8 /* Location.swift in Sources */,
 				8BCBD4052194B7A400966CE8 /* Coordinate.swift in Sources */,
 			);
@@ -480,7 +527,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BCBD3C62194A42A00966CE8 /* PleyTests.swift in Sources */,
+				8B225C3C21A09EF800DDB583 /* Responses.swift in Sources */,
+				8B7980C3219F3D3C00C33E2A /* MockYelpAPIService.swift in Sources */,
+				8BCBD3C62194A42A00966CE8 /* RestaurantViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,7 +721,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = ED9FA96C83F2D753172388C8 /* Pods-PleyTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XZQ827NZWJ;
@@ -694,7 +743,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 346D1430B36770773E7B2E10 /* Pods-PleyTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = XZQ827NZWJ;

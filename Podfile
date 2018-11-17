@@ -20,5 +20,7 @@ target 'Pley' do
 
   target 'PleyTests' do
     inherit! :search_paths
+    pod 'RxTest'
+    pod 'RxBlocking'
   end
 end

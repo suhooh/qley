@@ -14,20 +14,28 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
         fileprivate static let restaurantRowHeight: CGFloat = 110
     }
 
+    enum TableSection: Int {
+        case autocompletes = 0
+        case restaurants = 1
+
+        static var autocompletesIndex: Int { return autocompletes.rawValue }
+        static var restaurantsIndex: Int { return restaurants.rawValue }
+    }
+
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerSectionHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
-    private let searchText = Variable<String>("")
+    private let searchString = Variable<String>("")
+    private var needsAutocomplete: Bool = true
     private var previousDrawerPosition: PulleyPosition?
-
     var selectedIndex: Int = 0 {
         didSet {
             if pulleyViewController?.drawerPosition != .partiallyRevealed {
                 pulleyViewController?.setDrawerPosition(position: .partiallyRevealed, animated: true)
             }
-            let indexPath = IndexPath(row: selectedIndex, section: 1)
+            let indexPath = IndexPath(row: selectedIndex, section: TableSection.restaurantsIndex)
             let cell = tableView.cellForRow(at: indexPath)
 
             tableView.scrollToRow(at: indexPath, at: .top, animated: true)
@@ -38,6 +46,14 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
                 execute: { cell?.setSelected(false, animated: true) })
         }
     }
+    private lazy var noItemLabel: UILabel = {
+        let noItem: UILabel = UILabel()
+        noItem.font = UIFont.boldSystemFont(ofSize: 16)
+        noItem.textAlignment = .center
+        noItem.textColor = .gray
+        noItem.text = "No restaurants available in this area."
+        return noItem
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,8 +69,8 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-//            self.pulleyViewController?.bounceDrawer()
+//        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+//            self?.pulleyViewController?.bounceDrawer()
 //        }
     }
 
@@ -67,33 +83,34 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
 
     private func bindSearchBar(_ viewModel: RestaurantViewModel) {
         searchBar.rx.text.orEmpty.asDriver()
-            .drive(searchText)
+            .drive(searchString)
             .disposed(by: disposeBag)
 
-        searchText.asObservable()
-            .subscribe(onNext: { self.searchBar.text = $0 })
+        searchString.asObservable()
+            .subscribe(onNext: { [unowned self] in self.searchBar.text = $0 })
             .disposed(by: disposeBag)
 
-        searchText.asObservable()
-            .bind(to: viewModel.input.searchText)
+        searchString.asObservable()
+            .map { [unowned self] in SearchTerm($0, autocomplete: self.needsAutocomplete) }
+            .bind(to: viewModel.input.searchTerm)
             .disposed(by: disposeBag)
 
         searchBar.rx.searchButtonClicked
-            .do(onNext: { _ in
+            .do(onNext: { [unowned self] _ in
                 self.searchBarResignFirstResponder()
             })
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
 
         searchBar.rx.cancelButtonClicked
-            .subscribe { _ in
+            .subscribe { [unowned self] _ in
                 self.searchBarResignFirstResponder()
                 self.searchBar.setShowsCancelButton(false, animated: true)
             }
             .disposed(by: disposeBag)
 
         searchBar.rx.textDidBeginEditing
-            .subscribe { _ in
+            .subscribe { [unowned self] _ in
                 self.searchBar.setShowsCancelButton(true, animated: true)
             }
             .disposed(by: disposeBag)
@@ -127,7 +144,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
         Observable
             .zip(tableView.rx.itemSelected, tableView.rx.modelSelected(SectionItem.self))
             // consume restaurant selection
-            .do(onNext: { indexPath, model in
+            .do(onNext: { [unowned self] indexPath, model in
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 switch model {
                 case .restaurantItem:
@@ -145,8 +162,10 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
                 }
             }
             .filter { $0 != nil }
-            .do(onNext: { str in
-                self.searchText.value = str ?? ""
+            .do(onNext: { [unowned self] str in
+                self.needsAutocomplete = false
+                self.searchString.value = str ?? ""
+                self.needsAutocomplete = true
                 self.searchBarResignFirstResponder()
             })
             .map { _ in }
@@ -154,11 +173,11 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         viewModel.output.restaurants
-            .subscribe(onNext: { data in self.displayNoItems(data.first == nil) })
+            .subscribe(onNext: { [unowned self] data in self.displayNoItems(data.first == nil) })
             .disposed(by: disposeBag)
 
         viewModel.output.autocompletes
-            .subscribe(onNext: { _ in self.displayNoItems(false) })
+            .subscribe(onNext: { [unowned self] _ in self.displayNoItems(false) })
             .disposed(by: disposeBag)
     }
 
@@ -168,26 +187,18 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     }
 
     private func displayNoItems(_ isOn: Bool) {
-        if isOn {
-            let noItem: UILabel = UILabel()
-            noItem.font = UIFont.boldSystemFont(ofSize: 16)
-            noItem.textAlignment = .center
-            noItem.textColor = .gray
-            noItem.text = "No restaurants available in this area."
-            self.tableView.backgroundView = noItem
-            self.tableView.separatorStyle = .none
-        } else {
-            self.tableView.backgroundView = nil
-            self.tableView.separatorStyle = .singleLine
-        }
+        self.tableView.backgroundView = isOn ? noItemLabel : nil
+        self.tableView.separatorStyle = isOn ? .none : .singleLine
     }
 
-    // MARK: - UITableViewDelegate
+// MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? Constants.autocompletedRowHeight : Constants.restaurantRowHeight
+        return indexPath.section == TableSection.autocompletesIndex
+            ? Constants.autocompletedRowHeight
+            : Constants.restaurantRowHeight
     }
 
-    // MARK: - PulleyDrawerViewControllerDelegate
+// MARK: - PulleyDrawerViewControllerDelegate
     // For devices with a bottom safe area ( e.g. iPhone X )
 
     func collapsedDrawerHeight(bottomSafeArea: CGFloat) -> CGFloat {

@@ -11,10 +11,6 @@ class RestaurantTableViewCell: UITableViewCell {
     @IBOutlet weak var priceAndCagegoriesLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     func setUp(with restaurant: Restaurant, index: Int) {
         nameLabel.text = "\(index + 1). \(restaurant.name)"
         ratingView.rating = restaurant.rating ?? 0

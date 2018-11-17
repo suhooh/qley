@@ -4,12 +4,15 @@ import RxAlamofire
 import Alamofire
 import SwiftyJSON
 
-class YelpAPIService {
+class YelpAPIService: YelpAPIServiceProtocol {
+
     struct Constants {
         static let host = "api.yelp.com"
         fileprivate static let baseURL = "https://" + host + "/v3/"
         private static let APIKeyPrefix = "Bearer "
+        // swiftlint:disable line_length
         fileprivate static let APIKey =  APIKeyPrefix // + "YOUR API KEY HERE"
+        // swiftlint:enable line_length
     }
 
     enum Resource: String {
@@ -23,7 +26,7 @@ class YelpAPIService {
         case parseFailed
     }
 
-    let networking = Variable<Bool>(false)
+    var isNetworking = Variable<Bool>(false)
 
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
@@ -38,14 +41,14 @@ class YelpAPIService {
             "radius": String(min(radius, 40000))
         ]
 
-        networking.value = true
+        isNetworking.value = true
         return RxAlamofire.requestJSON(.get, Resource.businessSearch.path,
                                        parameters: params,
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
-            .flatMap { (_, json) -> Observable<BusinessSearchResponse> in
-                self.networking.value = false
+            .flatMap { [weak self] (_, json) -> Observable<BusinessSearchResponse> in
+                self?.isNetworking.value = false
                 guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else {
                     return Observable.error(APIError.parseFailed)
                 }

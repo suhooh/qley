@@ -1,7 +1,7 @@
 import UIKit
 import RxSwift
 
-protocol RxBaseViewControllerProtocol {
+protocol RxBaseViewControllerProtocol: class {
     associatedtype ViewModelType
 
     func bind(viewModel: ViewModelType)
@@ -16,14 +16,14 @@ class RxBaseViewController<ViewModelType>: UIViewController, RxBaseViewControlle
         }
     }
 
-    // MARK: - RxBaseViewControllerProtocol
+// MARK: - RxBaseViewControllerProtocol
     func bind(viewModel: ViewModelType) {
         // common routines
     }
 }
 
 class RxBaseTableViewCell<ViewModelType>: UITableViewCell, RxBaseViewControllerProtocol {
-    internal var disposeBag: DisposeBag?
+    internal var disposeBag = DisposeBag()
     var viewModel: ViewModelType? {
         didSet {
             guard let viewModel = viewModel else { return }
@@ -33,14 +33,12 @@ class RxBaseTableViewCell<ViewModelType>: UITableViewCell, RxBaseViewControllerP
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        // Clean Rx subscriptions
-        disposeBag = nil
+        // Clean Rx subscriptions by creating a new bag
+        disposeBag = DisposeBag()
     }
 
-    // MARK: - RxBaseViewControllerProtocol
+// MARK: - RxBaseViewControllerProtocol
     func bind(viewModel: ViewModelType) {
-        disposeBag = DisposeBag()
-
         // bind comes here
     }
 }

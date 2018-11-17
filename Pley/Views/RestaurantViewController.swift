@@ -4,29 +4,26 @@ import RxSwift
 import DSGradientProgressView
 
 class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtocol {
-
-    private let viewModel = RestaurantViewModel()
+    var viewModel: RestaurantViewModel? {
+        didSet {
+            guard let viewModel = viewModel else { return }
+            bind(viewModel: viewModel)
+        }
+    }
     private let disposeBag = DisposeBag()
-    private var progressView: DSGradientProgressView?
+    lazy var progressView: DSGradientProgressView = {
+        let progress = DSGradientProgressView(frame: CGRect(origin: CGPoint(x: 0, y: 0),
+                                                            size: CGSize(width: view.frame.width, height: 3)))
+        progress.barColor = #colorLiteral(red: 0.3963322639, green: 0.6601038575, blue: 0.9536740184, alpha: 1)
+        progress.isHidden = true
+        view.addSubview(progress)
+        return progress
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         animationDuration = 0.5
-
-        progressView = DSGradientProgressView(frame: CGRect(origin: CGPoint(x: 0, y: 0),
-                                                            size: CGSize(width: view.frame.width, height: 3)))
-        progressView?.barColor = #colorLiteral(red: 0.3963322639, green: 0.6601038575, blue: 0.9536740184, alpha: 1)
-        progressView?.isHidden = true
-        view.addSubview(progressView!)
-
-        guard let mapViewController = primaryContentViewController as? RestaurantMapViewController,
-            let tableViewController = drawerContentViewController as? RestaurantTableViewController
-            else { return }
-        mapViewController.viewModel = viewModel
-        tableViewController.viewModel = viewModel
-
-        bind(viewModel: viewModel)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillDisappear),
@@ -39,9 +36,16 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
     }
 
     func bind(viewModel: RestaurantViewModel) {
-        viewModel.output.networking.asObservable()
-            .subscribe(onNext: { isNetworking in
-                isNetworking ? self.progressView?.wait() : self.progressView?.signal()
+        guard let mapViewController = primaryContentViewController as? RestaurantMapViewController,
+            let tableViewController = drawerContentViewController as? RestaurantTableViewController
+            else { return }
+
+        mapViewController.viewModel = viewModel
+        tableViewController.viewModel = viewModel
+
+        viewModel.output.isNetworking.asObservable()
+            .subscribe(onNext: { [weak self] isNetworking in
+                isNetworking ? self?.progressView.wait() : self?.progressView.signal()
             })
             .disposed(by: disposeBag)
     }

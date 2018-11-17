@@ -14,26 +14,24 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
     @IBOutlet weak var searchThisAreaButton: UIButton!
     @IBOutlet weak var userTrackButtonView: UIView!
     @IBOutlet weak var userControlViewBottomConstraint: NSLayoutConstraint!
+
     private var mapChangedFromUserInteraction = false
-
-    private let locationManager = CLLocationManager()
-    private var trackButton: MKUserTrackingButton?
-
     private var properBottomConstraint: CGFloat = 0.0
-
     var selectedIndex: Int = 0 {
         didSet {
             for annotation in mapView.annotations {
-                if let ann = annotation as? RestaurantAnnotation, ann.number == selectedIndex + 1 {
-                    mapView.selectAnnotation(ann, animated: true)
-                    if !mapView.annotations(in: mapView.visibleMapRect).contains(ann) {
-                        mapView.setCenter(ann.coordinate, animated: true)
+                if let restaurant = annotation as? RestaurantAnnotation, restaurant.number == selectedIndex + 1 {
+                    mapView.selectAnnotation(restaurant, animated: true)
+                    if !mapView.annotations(in: mapView.visibleMapRect).contains(restaurant) {
+                        showAnnotationsInVisibleRegion(offset: self.properBottomConstraint)
                     }
                     return
                 }
             }
         }
     }
+    private lazy var locationManager = CLLocationManager()
+    private lazy var trackButton: MKUserTrackingButton = MKUserTrackingButton(mapView: mapView)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,22 +56,24 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         Observable
-            .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchText.asObservable())
-            .do(onNext: { _, term in
+            .combineLatest(mapView.rx.region.asObservable(), viewModel.input.searchTerm.asObservable())
+            .do(onNext: { [unowned self] _, term in
                 self.searchThisAreaButton.isHidden = !(self.mapChangedFromUserInteraction && !term.isEmpty)
             })
-            .map { region, _ in return (region, self.mapView.currentRadius) }
-            .bind(to: viewModel.input.regionAndRadius)
+            .map { [unowned self] region, _ in
+                return SearchArea(coordinate: region.center, radius: self.mapView.currentRadius)
+            }
+            .bind(to: viewModel.input.searchArea)
             .disposed(by: disposeBag)
 
         mapView.rx.regionWillChangeAnimated
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { [unowned self] _ in
                 self.mapChangedFromUserInteraction = self.mapViewRegionDidChangeFromUserInteraction()
             })
             .disposed(by: disposeBag)
 
         mapView.rx.didSelectAnnotationView
-            .subscribe(onNext: { annotationView in
+            .subscribe(onNext: { [unowned self] annotationView in
                 if let pulley = self.pulleyViewController as? RestaurantViewController,
                     let annotation = annotationView.annotation as? RestaurantAnnotation {
                     pulley.shareUserMapSelection(index: annotation.number - 1)
@@ -82,32 +82,31 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         searchThisAreaButton.rx.tap
-            .do(onNext: { _ in self.searchThisAreaButton.isHidden = true })
+            .do(onNext: { [unowned self] _ in self.searchThisAreaButton.isHidden = true })
             .bind(to: viewModel.input.doSearch)
             .disposed(by: disposeBag)
 
         viewModel.output.annotations
-            .asDriver(onErrorJustReturn: [])
-            .do(onNext: { annotations in
+            .do(onNext: { [unowned self] annotations in
                 self.mapView.showAnnotations(annotations, animated: true)
                 self.showAnnotationsInVisibleRegion(offset: self.properBottomConstraint)
             })
             .drive(mapView.rx.annotations)
             .disposed(by: disposeBag)
 
-        viewModel.output.searchTextChanged
-            .subscribe(onNext: { _ in self.mapView.removeAnnotations(self.mapView.annotations) })
+        viewModel.output.searchTermChanged
+            .subscribe(onNext: { [unowned self] in self.mapView.removeAnnotations(self.mapView.annotations) })
             .disposed(by: disposeBag)
 
         locationManager.rx.didUpdateLocations
-            .subscribe(onNext: { _, locations in
+            .subscribe(onNext: { [unowned self] _, locations in
                 guard let location = locations.last else { return }
-                DispatchQueue.once { self.centerMapOnLocation(location: location) }
+                DispatchQueue.once { [weak self] in self?.centerMapOnLocation(location: location) }
             })
             .disposed(by: disposeBag)
 
         locationManager.rx.didChangeAuthorization
-            .subscribe({ _ in
+            .subscribe({ [unowned self] _ in
                 if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
                     self.trackUserLocation()
                 }
@@ -117,18 +116,15 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
 
     private func centerMapOnLocation(location: CLLocation) {
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
-                                                  latitudinalMeters: 1000,
-                                                  longitudinalMeters: 1000)
+                                                  latitudinalMeters: 2000,
+                                                  longitudinalMeters: 2000)
         mapView.setRegion(coordinateRegion, animated: true)
     }
 
     private func trackUserLocation() {
         mapView.showsUserLocation = true
-        trackButton = MKUserTrackingButton(mapView: mapView)
-        if let btn = trackButton {
-            userTrackButtonView.addSubview(btn)
-            userTrackButtonView.isHidden = false
-        }
+        userTrackButtonView.addSubview(trackButton)
+        userTrackButtonView.isHidden = false
         locationManager.startUpdatingLocation()
     }
 
@@ -158,7 +154,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
         return false
     }
 
-    // MARK: - MKMapViewDelegate
+// MARK: - MKMapViewDelegate
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
@@ -169,7 +165,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
         return view
     }
 
-    // MARK: - PulleyPrimaryContentControllerDelegate
+// MARK: - PulleyPrimaryContentControllerDelegate
 
     func drawerPositionDidChange(drawer: PulleyViewController, bottomSafeArea: CGFloat) {
         if drawer.drawerPosition == .open {

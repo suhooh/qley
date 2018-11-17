@@ -5,10 +5,6 @@ class AutocompletTableViewCell: UITableViewCell {
 
     @IBOutlet weak var completedLabel: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
     func setUp(with text: String) {
         completedLabel.text = text
     }
