@@ -16,7 +16,7 @@ final class RestaurantViewModel: ViewModelType {
         let autocompletes: Observable<[String]>
         let annotations: Driver<[RestaurantAnnotation]>
         let searchTermChanged: Observable<Void>
-        let networking: Variable<Bool>
+        let isNetworking: Variable<Bool>
     }
 
     let input: Input
@@ -92,7 +92,7 @@ final class RestaurantViewModel: ViewModelType {
                              autocompletes: autocompletes,
                              annotations: annotations,
                              searchTermChanged: searchTermChanged,
-                             networking: yelpApiService.networking)
+                             isNetworking: yelpApiService.isNetworking)
         self.input = Input(searchTerm: searchTerm,
                            searchArea: searchArea,
                            doSearch: doSearchSubject.asObserver())

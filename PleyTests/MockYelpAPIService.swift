@@ -8,23 +8,26 @@ import SwiftyJSON
 
 class MockYelpAPIService: YelpAPIServiceProtocol {
 
-    var networking = Variable<Bool>(false)
+    var isNetworking = Variable<Bool>(false)
 
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
-        let searchTerm = term.trimmingCharacters(in: .whitespacesAndNewlines)
-            .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
 
-        networking.value = true
-        networking.value = false
+        isNetworking.value = true
+        isNetworking.value = false
 
-        return Observable.just(BusinessSearchResponse())
+        let json = JSON(parseJSON: Response.businessSearchResponseJson)
+        guard let businessSearchResponse = BusinessSearchResponse(json) else {
+            return Observable.just(BusinessSearchResponse())
+        }
+        return Observable.just(businessSearchResponse)
     }
 
     func autocomplete(_ term: String, latitude: Double?, longitude: Double?) -> Observable<AutocompleteResponse> {
-        let searchTerm = term.trimmingCharacters(in: .whitespacesAndNewlines)
-            .addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? ""
-
-        return searchTerm.isEmpty ? Observable.just(AutocompleteResponse()) : Observable.just(AutocompleteResponse())
+        let json = JSON(parseJSON: Response.autocompleteResponseJsonString)
+        guard let autocompleteResponse = AutocompleteResponse(json) else {
+            return Observable.just(AutocompleteResponse())
+        }
+        return Observable.just(autocompleteResponse)
     }
 }

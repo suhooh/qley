@@ -43,7 +43,7 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
         mapViewController.viewModel = viewModel
         tableViewController.viewModel = viewModel
 
-        viewModel.output.networking.asObservable()
+        viewModel.output.isNetworking.asObservable()
             .subscribe(onNext: { [weak self] isNetworking in
                 isNetworking ? self?.progressView.wait() : self?.progressView.signal()
             })
