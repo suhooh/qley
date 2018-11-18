@@ -1,7 +1,7 @@
 import UIKit
 
 class AutocompletTableViewCell: UITableViewCell {
-    static let reuseIdendifier = String(describing: AutocompletTableViewCell.self)
+    static let reuseIdentifier = String(describing: AutocompletTableViewCell.self)
 
     @IBOutlet weak var completedLabel: UILabel!
 

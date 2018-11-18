@@ -364,6 +364,33 @@
             </objects>
             <point key="canvasLocation" x="845.60000000000002" y="106.59670164917542"/>
         </scene>
+        <!--Restaurant Detail View Controller-->
+        <scene sceneID="pQW-b1-ZCr">
+            <objects>
+                <viewController storyboardIdentifier="RestaurantDetailViewController" id="7eQ-4U-MzT" customClass="RestaurantDetailViewController" customModule="Pley" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="A0m-EG-zzg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jZc-j8-KIz">
+                                <rect key="frame" x="16" y="49" width="331" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="pd5-Yj-Hlm"/>
+                    </view>
+                    <connections>
+                        <outlet property="nameLabel" destination="jZc-j8-KIz" id="7hE-Xf-Evw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OId-BI-zGW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1552.8" y="106.59670164917542"/>
+        </scene>
     </scenes>
     <resources>
         <image name="flower" width="24" height="24"/>

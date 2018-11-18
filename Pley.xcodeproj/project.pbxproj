@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5B5346E405C034EE0BB545CF /* Pods_Pley.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40FB80012C47927E6620F8DD /* Pods_Pley.framework */; };
 		8B225C3C21A09EF800DDB583 /* Responses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C3B21A09EF800DDB583 /* Responses.swift */; };
+		8B225C3E21A1010D00DDB583 /* RestaurantDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B225C3D21A1010D00DDB583 /* RestaurantDetailViewController.swift */; };
 		8B45C68F219A5E8A0079770E /* NumberAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */; };
 		8B45D070219B99EA00E045E8 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B45D06F219B99EA00E045E8 /* Restaurant.swift */; };
 		8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7980BA219E568D00C33E2A /* SearchTerm.swift */; };
@@ -59,6 +60,7 @@
 		40FB80012C47927E6620F8DD /* Pods_Pley.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pley.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6668E757E08375710F71F451 /* Pods-Pley.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pley.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pley/Pods-Pley.debug.xcconfig"; sourceTree = "<group>"; };
 		8B225C3B21A09EF800DDB583 /* Responses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responses.swift; sourceTree = "<group>"; };
+		8B225C3D21A1010D00DDB583 /* RestaurantDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDetailViewController.swift; sourceTree = "<group>"; };
 		8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberAnnotationView.swift; sourceTree = "<group>"; };
 		8B45D06F219B99EA00E045E8 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		8B7980BA219E568D00C33E2A /* SearchTerm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTerm.swift; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				8BCBD4122195F75700966CE8 /* RestaurantTableViewCell.swift */,
 				8BCBD41C21976E1700966CE8 /* AutocompletTableViewCell.swift */,
 				8B45C68E219A5E8A0079770E /* NumberAnnotationView.swift */,
+				8B225C3D21A1010D00DDB583 /* RestaurantDetailViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 				8BCBD40D2194BA5900966CE8 /* RestaurantViewModel.swift in Sources */,
 				8BCBD41721961FEC00966CE8 /* RestaurantTableViewController.swift in Sources */,
 				8BCBD40F2194C16700966CE8 /* YelpAPIService.swift in Sources */,
+				8B225C3E21A1010D00DDB583 /* RestaurantDetailViewController.swift in Sources */,
 				8BCBD4012194A7DA00966CE8 /* Business.swift in Sources */,
 				8BCBD3B32194A42900966CE8 /* RestaurantViewController.swift in Sources */,
 				8B7980BB219E568D00C33E2A /* SearchTerm.swift in Sources */,

@@ -9,6 +9,7 @@ import Pulley
 
 class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
                                    MKMapViewDelegate, PulleyPrimaryContentControllerDelegate {
+    static let identifier = String(describing: RestaurantMapViewController.self)
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var searchThisAreaButton: UIButton!
@@ -36,7 +37,7 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.register(NumberAnnotationView.self,
-                         forAnnotationViewWithReuseIdentifier: NumberAnnotationView.reuseIdendifier)
+                         forAnnotationViewWithReuseIdentifier: NumberAnnotationView.reuseIdentifier)
         checkLocationAuthorizationStatus()
     }
 
@@ -159,8 +160,8 @@ class RestaurantMapViewController: RxBaseViewController<RestaurantViewModel>,
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !annotation.isKind(of: MKUserLocation.self) else { return nil }
 
-        let view = mapView.dequeueReusableAnnotationView(withIdentifier: NumberAnnotationView.reuseIdendifier) ??
-            MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: NumberAnnotationView.reuseIdendifier)
+        let view = mapView.dequeueReusableAnnotationView(withIdentifier: NumberAnnotationView.reuseIdentifier) ??
+            MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: NumberAnnotationView.reuseIdentifier)
         view.annotation = annotation
         return view
     }

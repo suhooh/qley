@@ -2,7 +2,7 @@ import UIKit
 import Cosmos
 
 class RestaurantTableViewCell: UITableViewCell {
-    static let reuseIdendifier = String(describing: RestaurantTableViewCell.self)
+    static let reuseIdentifier = String(describing: RestaurantTableViewCell.self)
 
     @IBOutlet weak var mainImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!

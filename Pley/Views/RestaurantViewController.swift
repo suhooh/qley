@@ -3,7 +3,8 @@ import Pulley
 import RxSwift
 import DSGradientProgressView
 
-class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtocol {
+class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtocol,
+    UIViewControllerPreviewingDelegate {
     var viewModel: RestaurantViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
@@ -71,5 +72,35 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
     func shareUserTableSelection(index: Int) {
         guard let mapViewController = primaryContentViewController as? RestaurantMapViewController else { return }
         mapViewController.selectedIndex = index
+    }
+
+    // 3D touch
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if self.traitCollection.forceTouchCapability == .available {
+            registerForPreviewing(with: self, sourceView: view)
+        }
+    }
+
+    // MARK: - UIViewControllerPreviewingDelegate
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing,
+                           viewControllerForLocation location: CGPoint) -> UIViewController? {
+        guard let restaurantViewController = drawerContentViewController as? RestaurantTableViewController,
+            let tableView = restaurantViewController.tableView,
+            let indexPath = tableView.indexPathForRow(at: view.convert(location, to: tableView)),
+            let cell = tableView.cellForRow(at: indexPath),
+            let restaurantDetailViewController = UIStoryboard(name: "Main", bundle: nil)
+                .instantiateViewController(withIdentifier: RestaurantDetailViewController.identifier)
+                as? RestaurantDetailViewController else { return nil }
+
+        let restaurant = restaurantViewController.restaurants[indexPath.row]
+        restaurantDetailViewController.restaurant = restaurant
+        restaurantDetailViewController.preferredContentSize = CGSize(width: 0.0, height: 300)
+        previewingContext.sourceRect = tableView.convert(cell.frame, to: view)
+        return restaurantDetailViewController
+    }
+
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing,
+                           commit viewControllerToCommit: UIViewController) {
+        //        show(viewControllerToCommit, sender: self)
     }
 }
