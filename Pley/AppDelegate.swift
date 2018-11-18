@@ -16,15 +16,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window = UIWindow(frame: UIScreen.main.bounds)
         let mainContentVC = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "RestaurantMapViewController")
+            .instantiateViewController(withIdentifier: RestaurantMapViewController.identifier)
         let drawerContentVC = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(withIdentifier: "RestaurantTableViewController")
+            .instantiateViewController(withIdentifier: RestaurantTableViewController.identifier)
         let restaurantViewController = RestaurantViewController(contentViewController: mainContentVC,
                                                                 drawerViewController: drawerContentVC)
 
         restaurantViewController.viewModel = RestaurantViewModel()
 
-        window?.rootViewController = restaurantViewController
+        let navigationController = UINavigationController(rootViewController: restaurantViewController)
+        navigationController.setNavigationBarHidden(true, animated: false)
+
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
 
         return true

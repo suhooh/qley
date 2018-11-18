@@ -1,7 +1,7 @@
 import MapKit
 
 class NumberAnnotationView: MKMarkerAnnotationView {
-    static let reuseIdendifier = String(describing: NumberAnnotationView.self)
+    static let reuseIdentifier = String(describing: NumberAnnotationView.self)
 
     override var annotation: MKAnnotation? {
         willSet {

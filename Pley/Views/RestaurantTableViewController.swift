@@ -6,6 +6,7 @@ import Pulley
 
 class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
                                      UITableViewDelegate, PulleyDrawerViewControllerDelegate {
+    static let identifier = String(describing: RestaurantTableViewController.self)
 
     struct Constants {
         static let partialRevealedDrawerHeight: CGFloat = 264.0
@@ -28,6 +29,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
     @IBOutlet weak var tableViewBottomConstraint: NSLayoutConstraint!
 
     private let searchString = Variable<String>("")
+    var restaurants: [Restaurant] = []
     private var needsAutocomplete: Bool = true
     private var previousDrawerPosition: PulleyPosition?
     var selectedIndex: Int = 0 {
@@ -173,7 +175,10 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             .disposed(by: disposeBag)
 
         viewModel.output.restaurants
-            .subscribe(onNext: { [unowned self] data in self.displayNoItems(data.first == nil) })
+            .subscribe(onNext: { [unowned self] data in
+                self.restaurants = data
+                self.displayNoItems(data.first == nil)
+            })
             .disposed(by: disposeBag)
 
         viewModel.output.autocompletes
@@ -237,14 +242,14 @@ extension RestaurantTableViewController {
                 switch dataSource[indexPath] {
                 case let .autocompleteItem(text):
                     guard let cell = tableView.dequeueReusableCell(
-                        withIdentifier: AutocompletTableViewCell.reuseIdendifier,
+                        withIdentifier: AutocompletTableViewCell.reuseIdentifier,
                         for: indexPath) as? AutocompletTableViewCell
                         else { return UITableViewCell() }
                     cell.setUp(with: text)
                     return cell
                 case let .restaurantItem(restaurant):
                     guard let cell = tableView.dequeueReusableCell(
-                        withIdentifier: RestaurantTableViewCell.reuseIdendifier,
+                        withIdentifier: RestaurantTableViewCell.reuseIdentifier,
                         for: indexPath) as? RestaurantTableViewCell
                         else { return UITableViewCell() }
                     cell.setUp(with: restaurant, index: indexPath.row)
