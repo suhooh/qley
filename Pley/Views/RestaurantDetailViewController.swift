@@ -21,4 +21,16 @@ class RestaurantDetailViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)
     }
+
+    override var previewActionItems: [UIPreviewActionItem] {
+        var actions: [UIPreviewAction] = []
+        if let phone = restaurant?.phone, let number = URL(string: "tel://" + phone) {
+            let call = UIPreviewAction(title: "Call for a Reservation", style: .default) { _, _ in
+                UIApplication.shared.open(number)
+            }
+            actions.append(call)
+        }
+        actions.append(UIPreviewAction(title: "Close", style: .destructive) { _, _ in })
+        return actions
+    }
 }
