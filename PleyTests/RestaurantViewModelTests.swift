@@ -139,7 +139,7 @@ class RestaurantViewModelTests: XCTestCase {
                        distance: $0.distance, reviewCount: $0.reviewCount, price: $0.price,
                        categories: $0.categories?.compactMap { cat in cat.title },
                        location: $0.location?.displayAddress?.joined(separator: ", "),
-                       imageUrl: $0.imageUrl)
+                       imageUrl: $0.imageUrl, phone: $0.phone)
         }
 
         waitForExpectations(timeout: 1.0) { error in

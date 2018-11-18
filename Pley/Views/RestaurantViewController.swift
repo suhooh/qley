@@ -5,6 +5,11 @@ import DSGradientProgressView
 
 class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtocol,
     UIViewControllerPreviewingDelegate {
+
+    struct Constants {
+        fileprivate static let preferredContentHeight: CGFloat = 500.0
+    }
+
     var viewModel: RestaurantViewModel? {
         didSet {
             guard let viewModel = viewModel else { return }
@@ -94,13 +99,14 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
 
         let restaurant = restaurantViewController.restaurants[indexPath.row]
         restaurantDetailViewController.restaurant = restaurant
-        restaurantDetailViewController.preferredContentSize = CGSize(width: 0.0, height: 300)
+        restaurantDetailViewController.preferredContentSize =
+            CGSize(width: 0.0, height: Constants.preferredContentHeight)
         previewingContext.sourceRect = tableView.convert(cell.frame, to: view)
         return restaurantDetailViewController
     }
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing,
                            commit viewControllerToCommit: UIViewController) {
-        //        show(viewControllerToCommit, sender: self)
+        // show(viewControllerToCommit,sender: self)
     }
 }
