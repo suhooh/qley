@@ -1,5 +1,6 @@
 import UIKit
 import Cosmos
+import MapKit
 
 class RestaurantDetailViewController: UIViewController {
     static let identifier = String(describing: RestaurantDetailViewController.self)
@@ -75,7 +76,12 @@ class RestaurantDetailViewController: UIViewController {
             }
             actions.append(call)
         }
-        actions.append(UIPreviewAction(title: "Close", style: .destructive) { _, _ in })
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            let call = UIPreviewAction(title: "Show me the path", style: .default) { _, _ in
+                // call map view draw path - ViewModel
+            }
+            actions.append(call)
+        }
         return actions
     }
 }
