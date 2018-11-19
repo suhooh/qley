@@ -31,4 +31,6 @@ qley is a restaurant search for iOS by Yelp Fusion API.
 
 - MKMapView: Custom annotation, Drawing routes
 
+- Peek with 3D touch
+
 - Pulley
