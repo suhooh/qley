@@ -81,7 +81,7 @@ class RestaurantViewModelTests: XCTestCase {
 
     func testSearchTermUpdatesAutocompletes() {
         let expect = expectation(description: "Autocomplete")
-        let observer = scheduler.createObserver([String].self)
+        let observer = scheduler.createObserver([Autocomplete].self)
 
         viewModel.output.autocompletes
             .subscribe(onNext: { _ in
@@ -100,12 +100,16 @@ class RestaurantViewModelTests: XCTestCase {
         scheduler.start()
 
         let result = ["Sushi", "Sushi Delivery", "Sushi Restaurant",
-                      "Sushi Bars", "Conveyor Belt Sushi", "Japanese"]
+                      "Sushi Bars", "Conveyor Belt Sushi", "Japanese"].compactMap { Autocomplete($0) }
 
         waitForExpectations(timeout: 1.0) { error in
             XCTAssertTrue(error == nil)
             XCTAssertEqual(observer.events.count, 1)
-            XCTAssertEqual(observer.events[0].value.element!, result)
+            for index in result.indices {
+                // filter recent searches before comparison
+                let eventValue = observer.events[0].value.element!.filter({ $0.type == .autocomplete })[index].text
+                XCTAssertEqual(eventValue, result[index].text)
+            }
         }
     }
 
