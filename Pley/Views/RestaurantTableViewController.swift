@@ -122,8 +122,8 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
         // RxDataSources - Merge two observables to show one of the latest event between autocompletions or restaurants
         Observable.of(
             viewModel.output.autocompletes
-                .map { MultipleSectionModel.autocompleteSection(items: $0.map { str in
-                    SectionItem.autocompleteItem(text: str)
+                .map { MultipleSectionModel.autocompleteSection(items: $0.map { autocomplete in
+                    SectionItem.autocompleteItem(autocomplete: autocomplete)
                 })
             },
             viewModel.output.restaurants
@@ -159,7 +159,7 @@ class RestaurantTableViewController: RxBaseViewController<RestaurantViewModel>,
             // consume autocomplete selection
             .map { _, model -> String? in
                 switch model {
-                case let .autocompleteItem(text): return text
+                case let .autocompleteItem(autocomplete): return autocomplete.text
                 case .restaurantItem: return nil
                 }
             }
@@ -240,12 +240,12 @@ extension RestaurantTableViewController {
         return RxTableViewSectionedReloadDataSource<MultipleSectionModel>(
             configureCell: { (dataSource, tableView, indexPath, _) in
                 switch dataSource[indexPath] {
-                case let .autocompleteItem(text):
+                case let .autocompleteItem(autocomplete):
                     guard let cell = tableView.dequeueReusableCell(
                         withIdentifier: AutocompletTableViewCell.reuseIdentifier,
                         for: indexPath) as? AutocompletTableViewCell
                         else { return UITableViewCell() }
-                    cell.setUp(with: text)
+                    cell.setUp(with: autocomplete)
                     return cell
                 case let .restaurantItem(restaurant):
                     guard let cell = tableView.dequeueReusableCell(
@@ -263,7 +263,7 @@ extension RestaurantTableViewController {
 // type wrapper definition for multiple tableview data source
 
 enum SectionItem {
-    case autocompleteItem(text: String)
+    case autocompleteItem(autocomplete: Autocomplete)
     case restaurantItem(restaurant: Restaurant)
 }
 

@@ -13,7 +13,7 @@ final class RestaurantViewModel: ViewModelType {
 
     struct Output {
         let restaurants: Observable<[Restaurant]>
-        let autocompletes: Observable<[String]>
+        let autocompletes: Observable<[Autocomplete]>
         let annotations: Driver<[RestaurantAnnotation]>
         let searchTermChanged: Observable<Void>
         let isNetworking: Variable<Bool>
@@ -30,6 +30,9 @@ final class RestaurantViewModel: ViewModelType {
 
         let businessSearchResponse = doSearchSubject
             .withLatestFrom(Observable.combineLatest(searchTerm.asObservable(), searchArea.asObservable()))
+            .do(onNext: { term, _ in
+                RecentSearch.save(term.value)
+            })
             .flatMapLatest { term, area -> Observable<BusinessSearchResponse> in
                 return term.isEmpty
                     ? Observable.just(BusinessSearchResponse())
@@ -80,8 +83,17 @@ final class RestaurantViewModel: ViewModelType {
             }
             .share(replay: 1)
 
-        let autocompletes = autocompleteResponse.map { response -> [String] in
-            return (response.terms?.compactMap { $0.text } ?? []) + (response.categories?.compactMap { $0.title } ?? [])
+        let autocompletes = Observable
+            .combineLatest(autocompleteResponse, searchTerm.asObservable())
+            .map { response, term -> [Autocomplete] in
+                let recentSearches = RecentSearch.load(term.value)
+                    .compactMap { Autocomplete($0, type: .recentSearch) }
+                let terms = response.terms?.compactMap { Autocomplete($0.text, type: .autocomplete) } ?? []
+                let categories = response.categories?.compactMap { Autocomplete($0.title, type: .autocomplete) } ?? []
+                let autocompletes = (terms + categories).filter { autocomplete -> Bool in
+                    return !recentSearches.map { $0.text }.contains(autocomplete.text)
+                }
+                return recentSearches + autocompletes
         }
 
         let searchTermChanged = searchTerm.asObservable()
@@ -96,5 +108,38 @@ final class RestaurantViewModel: ViewModelType {
         self.input = Input(searchTerm: searchTerm,
                            searchArea: searchArea,
                            doSearch: doSearchSubject.asObserver())
+    }
+}
+
+private struct RecentSearch {
+    private static let keyForRecentSearch = "RecentSearch"
+    private static let maxRecentSearchCount = 5
+
+    static func load(_ substring: String? = nil) -> [String] {
+        var recentSearch: [String] = []
+        if let saved = UserDefaults.standard.array(forKey: keyForRecentSearch) as? [String] {
+            recentSearch += saved
+        }
+        if let substring = substring, !substring.isEmpty {
+            recentSearch = recentSearch.filter {
+                $0.lowercased().range(of: substring.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()) != nil
+            }
+        }
+        return recentSearch
+    }
+
+    static func save(_ text: String?) {
+        guard let text = text, !text.isEmpty else { return }
+
+        var recentSearch = load()
+        if let index = recentSearch.firstIndex(of: text) {
+            recentSearch.remove(at: index)
+        }
+        recentSearch.insert(text, at: 0)
+        recentSearch = Array(recentSearch[0..<min(recentSearch.count, RecentSearch.maxRecentSearchCount)])
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(recentSearch, forKey: keyForRecentSearch)
+        userDefaults.synchronize()
     }
 }
