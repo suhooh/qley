@@ -71,7 +71,7 @@ class RestaurantDetailViewController: UIViewController {
 
     override var previewActionItems: [UIPreviewActionItem] {
         var actions: [UIPreviewAction] = []
-        if let phone = restaurant?.phone, let number = URL(string: "tel://" + phone) {
+        if let phone = restaurant?.phone, !phone.isEmpty, let number = URL(string: "tel://" + phone) {
             let call = UIPreviewAction(title: "Call " + phone, style: .default) { _, _ in
                 UIApplication.shared.open(number)
             }
