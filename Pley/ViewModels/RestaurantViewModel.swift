@@ -57,7 +57,8 @@ final class RestaurantViewModel: ViewModelType {
             .map { response -> [RestaurantAnnotation] in
                 response.businesses.enumerated().compactMap { idx, business -> RestaurantAnnotation? in
                     guard let coordinate = business.coordinates?.clLocation2D else { return nil }
-                    return RestaurantAnnotation(number: idx + 1,
+                    return RestaurantAnnotation(id: business.id,
+                                                number: idx + 1,
                                                 name: business.name,
                                                 category: business.categories?.first?.title ?? "",
                                                 coordinate: coordinate)
