@@ -97,11 +97,13 @@ class RestaurantViewController: PulleyViewController, RxBaseViewControllerProtoc
                 .instantiateViewController(withIdentifier: RestaurantDetailViewController.identifier)
                 as? RestaurantDetailViewController else { return nil }
 
+        previewingContext.sourceRect = tableView.convert(cell.frame, to: view)
+
         let restaurant = restaurantViewController.restaurants[indexPath.row]
         restaurantDetailViewController.restaurant = restaurant
         restaurantDetailViewController.preferredContentSize =
             CGSize(width: 0.0, height: Constants.preferredContentHeight)
-        previewingContext.sourceRect = tableView.convert(cell.frame, to: view)
+        restaurantDetailViewController.mapDelegate = primaryContentViewController as? RestaurantMapViewController
         return restaurantDetailViewController
     }
 

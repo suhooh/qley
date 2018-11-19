@@ -1,4 +1,5 @@
 import UIKit
+import MapKit
 import Cosmos
 
 class RestaurantDetailViewController: UIViewController {
@@ -12,6 +13,7 @@ class RestaurantDetailViewController: UIViewController {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var phoneLabel: UILabel!
 
+    weak var mapDelegate: RestaurantMapViewProotocl?
     var restaurant: Restaurant?
 
     override func viewDidLoad() {
@@ -75,7 +77,15 @@ class RestaurantDetailViewController: UIViewController {
             }
             actions.append(call)
         }
-        actions.append(UIPreviewAction(title: "Close", style: .destructive) { _, _ in })
+        if let restaurant = restaurant,
+            let mapView = mapDelegate,
+            CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            let call = UIPreviewAction(title: "See the Route", style: .default) { _, _ in
+                mapView.restaurantMapViewDrawRoute(to: restaurant)
+            }
+            actions.append(call)
+        }
+        // actions.append(UIPreviewAction(title: "Close", style: .destructive) { _, _ in })
         return actions
     }
 }
