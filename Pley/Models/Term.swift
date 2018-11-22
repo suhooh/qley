@@ -1,10 +1,5 @@
 import Foundation
-import SwiftyJSON
 
-struct Term {
+struct Term: Codable {
     let text: String?
-
-    init?(_ json: JSON) {
-        self.text = json["text"].string
-    }
 }

@@ -87,8 +87,7 @@ final class RestaurantViewModel: ViewModelType {
         let autocompletes = Observable
             .combineLatest(autocompleteResponse, searchTerm.asObservable())
             .map { response, term -> [Autocomplete] in
-                let recentSearches = RecentSearch.load(term.value)
-                    .compactMap { Autocomplete($0, type: .recentSearch) }
+                let recentSearches = RecentSearch.load(term.value).compactMap { Autocomplete($0, type: .recentSearch) }
                 let terms = response.terms?.compactMap { Autocomplete($0.text, type: .autocomplete) } ?? []
                 let categories = response.categories?.compactMap { Autocomplete($0.title, type: .autocomplete) } ?? []
                 let autocompletes = (terms + categories).filter { autocomplete -> Bool in

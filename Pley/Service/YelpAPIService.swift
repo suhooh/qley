@@ -2,7 +2,6 @@ import UIKit
 import RxSwift
 import RxAlamofire
 import Alamofire
-import SwiftyJSON
 
 class YelpAPIService: YelpAPIServiceProtocol {
 
@@ -27,6 +26,11 @@ class YelpAPIService: YelpAPIServiceProtocol {
     }
 
     var isNetworking = Variable<Bool>(false)
+    var jsonDecoder: JSONDecoder = {
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        return jsonDecoder
+    }()
 
     func search(_ term: String,
                 latitude: Double, longitude: Double, radius: Int) -> Observable<BusinessSearchResponse> {
@@ -42,15 +46,17 @@ class YelpAPIService: YelpAPIServiceProtocol {
         ]
 
         isNetworking.value = true
-        return RxAlamofire.requestJSON(.get, Resource.businessSearch.path,
+        return RxAlamofire.requestData(.get, Resource.businessSearch.path,
                                        parameters: params,
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
-            .flatMap { [weak self] (_, json) -> Observable<BusinessSearchResponse> in
+            .flatMap { [weak self] (_, data) -> Observable<BusinessSearchResponse> in
                 self?.isNetworking.value = false
-                guard let businessSearchResponse = BusinessSearchResponse(JSON(json)) else {
-                    return Observable.error(APIError.parseFailed)
+                guard let decoded = try? self?.jsonDecoder.decode(BusinessSearchResponse.self, from: data),
+                    let businessSearchResponse = decoded
+                    else {
+                        return Observable.error(APIError.parseFailed)
                 }
                 return Observable.just(businessSearchResponse)
             }
@@ -65,14 +71,16 @@ class YelpAPIService: YelpAPIServiceProtocol {
         if let latitude = latitude { params["latitude"] = String(latitude) }
         if let longitude = longitude { params["longitude"] = String(longitude) }
 
-        return RxAlamofire.requestJSON(.get, Resource.autocomplete.path,
+        return RxAlamofire.requestData(.get, Resource.autocomplete.path,
                                        parameters: params,
                                        encoding: URLEncoding.default,
                                        headers: headers
             )
-            .flatMap { (_, json) -> Observable<AutocompleteResponse> in
-                guard let autocompleteResponse = AutocompleteResponse(JSON(json)) else {
-                    return Observable.error(APIError.parseFailed)
+            .flatMap { [weak self] (_, data) -> Observable<AutocompleteResponse> in
+                guard let decoded = try? self?.jsonDecoder.decode(AutocompleteResponse.self, from: data),
+                    let autocompleteResponse = decoded
+                    else {
+                        return Observable.error(APIError.parseFailed)
                 }
                 return Observable.just(autocompleteResponse)
         }
