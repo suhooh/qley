@@ -2,11 +2,15 @@ import Foundation
 import RxSwift
 import RxAlamofire
 import Alamofire
-import SwiftyJSON
 
 @testable import Pley
 
 class MockYelpAPIService: YelpAPIServiceProtocol {
+    var jsonDecoder: JSONDecoder = {
+        let jsonDecoder = JSONDecoder()
+        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
+        return jsonDecoder
+    }()
 
     var isNetworking = Variable<Bool>(false)
 
@@ -16,17 +20,19 @@ class MockYelpAPIService: YelpAPIServiceProtocol {
         isNetworking.value = true
         isNetworking.value = false
 
-        let json = JSON(parseJSON: Response.businessSearchResponseJson)
-        guard let businessSearchResponse = BusinessSearchResponse(json) else {
-            return Observable.just(BusinessSearchResponse())
+        guard let data = Response.businessSearchResponseJsonString.data(using: .utf8),
+            let businessSearchResponse = try? self.jsonDecoder.decode(BusinessSearchResponse.self, from: data)
+            else {
+                return Observable.just(BusinessSearchResponse())
         }
         return Observable.just(businessSearchResponse)
     }
 
     func autocomplete(_ term: String, latitude: Double?, longitude: Double?) -> Observable<AutocompleteResponse> {
-        let json = JSON(parseJSON: Response.autocompleteResponseJsonString)
-        guard let autocompleteResponse = AutocompleteResponse(json) else {
-            return Observable.just(AutocompleteResponse())
+        guard let data = Response.autocompleteResponseJsonString.data(using: .utf8),
+            let autocompleteResponse = try? self.jsonDecoder.decode(AutocompleteResponse.self, from: data)
+            else {
+                return Observable.just(AutocompleteResponse())
         }
         return Observable.just(autocompleteResponse)
     }
