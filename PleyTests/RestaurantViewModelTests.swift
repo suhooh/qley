@@ -3,7 +3,6 @@ import RxCocoa
 import RxSwift
 import RxTest
 import RxBlocking
-import SwiftyJSON
 
 @testable import Pley
 
@@ -93,7 +92,7 @@ class RestaurantViewModelTests: XCTestCase {
             .subscribe(observer)
             .disposed(by: disposeBag)
 
-        scheduler.createColdObservable([.next(10, SearchTerm("sushi", autocomplete: true))])
+        scheduler.createColdObservable([.next(10, SearchTerm("Sushi", autocomplete: true))])
             .bind(to: viewModel.input.searchTerm)
             .disposed(by: disposeBag)
 
@@ -136,9 +135,9 @@ class RestaurantViewModelTests: XCTestCase {
 
         scheduler.start()
 
-        let json = JSON(parseJSON: Response.businessSearchResponseJson)
-        let businessSearchResponse = BusinessSearchResponse(json)!
-        let result = businessSearchResponse.businesses.map {
+        let data = Response.businessSearchResponseJsonString.data(using: .utf8)!
+        let businessSearchResponse = try? mockYelpAPIService.jsonDecoder.decode(BusinessSearchResponse.self, from: data)
+        let result = businessSearchResponse!.businesses.map {
             Restaurant(id: $0.id, name: $0.name, rating: $0.rating,
                        distance: $0.distance, reviewCount: $0.reviewCount, price: $0.price,
                        categories: $0.categories?.compactMap { cat in cat.title },
@@ -176,9 +175,9 @@ class RestaurantViewModelTests: XCTestCase {
 
         scheduler.start()
 
-        let json = JSON(parseJSON: Response.businessSearchResponseJson)
-        let businessSearchResponse = BusinessSearchResponse(json)!
-        let result = businessSearchResponse.businesses
+        let data = Response.businessSearchResponseJsonString.data(using: .utf8)!
+        let businessSearchResponse = try? mockYelpAPIService.jsonDecoder.decode(BusinessSearchResponse.self, from: data)
+        let result = businessSearchResponse!.businesses
             .enumerated().compactMap { idx, business -> RestaurantAnnotation? in
                 guard let coordinate = business.coordinates?.clLocation2D else { return nil }
                 return RestaurantAnnotation(id: business.id,
