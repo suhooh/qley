@@ -36,7 +36,7 @@ PODS:
     - RxSwift (~> 4.0)
   - StatusBarOverlay (1.9):
     - Alamofire (~> 4.1)
-  - SwiftLint (0.27.0)
+  - SwiftLint (0.28.1)
 
 DEPENDENCIES:
   - Alamofire (~> 4.7)
@@ -95,7 +95,7 @@ SPEC CHECKSUMS:
   RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
   RxTest: 19d03286bdc0a3aaea5d61d4cde31fdf4bb8a5ba
   StatusBarOverlay: ce2193d14935dce0c7097ac8f79a7145e87e0c07
-  SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
+  SwiftLint: 7f5f7de0da74a649b16616cb5246ae323489656e
 
 PODFILE CHECKSUM: 9d2ea1049246639a040999e48c201e8675aeb775
 
