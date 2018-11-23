@@ -12,13 +12,13 @@ qley is a restaurant search for iOS by Yelp Fusion API.
         //
         // Add the API key.
         //
-        //
         fileprivate static let APIKey =  APIKeyPrefix + "9L2JW4BCKPcSGuclkmhC... it's long"
 
 
 - Run & qley
 
 ## What you can see in the code
+
 - Yelp Fusion API: Business search, Autocomplete
 
 - MVVM pattern
@@ -32,5 +32,7 @@ qley is a restaurant search for iOS by Yelp Fusion API.
 - MKMapView: Custom annotation, Drawing routes
 
 - Peek with 3D touch
+
+- JSON parsing with Codable
 
 - Pulley
